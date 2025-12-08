@@ -1,9 +1,11 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import {  useForm } from 'react-hook-form';
 import { FiLock, FiMail, FiUser } from 'react-icons/fi';
 import { Link } from 'react-router';
+import useAuth from '../../../Hooks/useAuth';
 
 const Register = () => {
+  const {setUser}=useAuth();
   // React Hook Form
   const {
     register,
@@ -19,7 +21,7 @@ const Register = () => {
   signInGoogle()
     .then(result => {
       const user = result.user;   // <-- correct
-
+      setUser(user);
       console.log("Google User:", user);
 
       navigate(location?.state || "/");

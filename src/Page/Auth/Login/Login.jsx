@@ -6,7 +6,7 @@ import useAuth from '../../../Hooks/useAuth';
 
 const Login = () => {
   const location = useLocation();
-  const { signInUser, signInGoogle } = useAuth();
+  const { signInUser, signInGoogle,setUser } = useAuth();
   const navigate = useNavigate();
   // React Hook Form
   const {
@@ -21,6 +21,7 @@ const Login = () => {
     signInUser(data.email, data.password)
       .then(result => {
         console.log(result.user)
+        setUser(result.user)
         navigate(location?.state || '/')
       })
       .catch(error => {
@@ -30,7 +31,8 @@ const Login = () => {
   const handleGoogleSubmit = () => {
   signInGoogle()
     .then(result => {
-      const user = result.user;   // <-- correct
+      const user = result.user;
+       setUser(user);
 
       console.log("Google User:", user);
 

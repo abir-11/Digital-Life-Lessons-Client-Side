@@ -4,6 +4,7 @@ import useAuth from "../../../Hooks/useAuth";
 
 const Navbar = () => {
     const { user, logOut, loading } = useAuth();
+    console.log(user);
     const handleLogOut = () => {
         logOut()
             .then(res => {
@@ -133,9 +134,15 @@ const Navbar = () => {
                                 tabIndex={0}
                                 className="menu menu-sm dropdown-content bg-white rounded-box z-50 mt-3 w-52 p-2 shadow"
                             >
+                                <li className="font-base px-5 py-1 rounded-xl   hover:bg-primary hover:text-white text-[12px]">
+                                    {
+                                        user?.displayName
+                                    }
+                                </li>
                                 <li className="font-base px-3 py-1 rounded-xl   hover:bg-primary hover:text-white text-xl">
                                     <Link to="/profile">Profile</Link>
                                 </li>
+
 
                                 <li className="font-base px-3 py-1 rounded-xl   hover:bg-primary hover:text-white text-xl">
                                     <Link to="/dashboard">Dashboard</Link>

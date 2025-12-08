@@ -17,6 +17,7 @@ import hero3 from '../../assets/HeroImg/pexels-prateekkatyal-2740956.jpg';
 import { Autoplay, Navigation, Pagination, Parallax } from 'swiper/modules';
 import Loading from './../Share/Loading/Loading';
 import useAuth from '../../Hooks/useAuth';
+import CardSection from './CardSection';
 
 const Home = () => {
     const {loading}=useAuth();
@@ -165,6 +166,9 @@ const Home = () => {
                     </SwiperSlide>
 
                 </Swiper>
+            </div>
+            <div className='my-4 max-w-11/12 mx-auto'>
+                <CardSection></CardSection>
             </div>
         </div>
     );
