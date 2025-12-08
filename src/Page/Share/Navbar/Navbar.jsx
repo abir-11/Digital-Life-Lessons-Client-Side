@@ -28,29 +28,8 @@ const Navbar = () => {
                     Home
                 </NavLink>
             </li>
-            <li>
-                <NavLink
-                    to="/add-lesson"
-                    className={({ isActive }) =>
-                        `font-base px-3 py-1 rounded-xl hover:underline ${isActive ? 'bg-[#cca3b3] text-white' : 'text-[#003028]'
-                        }`
-                    }
-                >
-                    Add Lesson
-                </NavLink>
-            </li>
-            <li>
-                <NavLink
-                    to="/my-lessons"
-                    className={({ isActive }) =>
-                        `font-base px-3 py-1 rounded-xl hover:underline ${isActive ? 'bg-[#cca3b3] text-white' : 'text-[#003028]'
-                        }`
-                    }
-                >
-                    My Lessons
-                </NavLink>
-            </li>
-            <li>
+
+             <li>
                 <NavLink
                     to="/public-lessons"
                     className={({ isActive }) =>
@@ -61,6 +40,32 @@ const Navbar = () => {
                     Public Lessons
                 </NavLink>
             </li>
+           {
+            user && <>
+            
+             <li>
+                <NavLink
+                    to="dashboard/add-lessons"
+                    className={({ isActive }) =>
+                        `font-base px-3 py-1 rounded-xl hover:underline ${isActive ? 'bg-[#cca3b3] text-white' : 'text-[#003028]'
+                        }`
+                    }
+                >
+                    Add Lesson
+                </NavLink>
+            </li>
+            <li>
+                <NavLink
+                    to="dashboard/my-lessons"
+                    className={({ isActive }) =>
+                        `font-base px-3 py-1 rounded-xl hover:underline ${isActive ? 'bg-[#cca3b3] text-white' : 'text-[#003028]'
+                        }`
+                    }
+                >
+                    My Lessons
+                </NavLink>
+            </li>
+           
             <li>
                 <NavLink
                     to="/pricing"
@@ -72,6 +77,8 @@ const Navbar = () => {
                     Pricing
                 </NavLink>
             </li>
+            </>
+           }
         </>
     );
 
@@ -95,8 +102,10 @@ const Navbar = () => {
                                 d="M4 6h16M4 12h8m-8 6h16" />
                         </svg>
                     </label>
-                    <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 w-52 p-2 shadow bg-base-100 rounded-xl">
-                        {links}
+                    <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 w-52 p-2 shadow bg-white rounded-xl">
+                     
+                         {links}
+                       
                     </ul>
                 </div>
 
@@ -107,7 +116,7 @@ const Navbar = () => {
 
             {/* Desktop Menu */}
             <div className="navbar-center hidden lg:flex">
-                <ul className="menu menu-horizontal px-1">
+                <ul className="menu menu-horizontal px-1 ">
                     {links}
                 </ul>
             </div>
