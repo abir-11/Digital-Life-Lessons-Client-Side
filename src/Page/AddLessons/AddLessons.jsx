@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiUpload, FiLock, FiGlobe, FiDollarSign, FiHelpCircle } from 'react-icons/fi';
 import useAuth from '../../Hooks/useAuth';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
+import Swal from 'sweetalert2';
+import { toast, ToastContainer } from 'react-toastify';
+import axios from 'axios';
 
 const AddLessons = () => {
   const { user } = useAuth();
-  const [imagePreview, setImagePreview] = useState(null);
+  const axiosSecure = useAxiosSecure();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const isPremiumUser = user?.isPremium || false; // Adjust based on your auth structure
 
   const {
@@ -25,49 +29,65 @@ const AddLessons = () => {
 
   const watchAccessLevel = watch('accessLevel');
 
-  // Handle image upload preview
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+
+
 
   // Form submission
   const onSubmit = async (data) => {
     setIsSubmitting(true);
-    
+
     try {
       // Create FormData for file upload
-      const formData = new FormData();
-      formData.append('title', data.title);
-      formData.append('description', data.description);
-      formData.append('category', data.category);
-      formData.append('emotionalTone', data.emotionalTone);
-      formData.append('privacy', data.privacy);
-      formData.append('accessLevel', data.accessLevel);
       
-      if (data.image && data.image[0]) {
-        formData.append('image', data.image[0]);
-      }
+      const formData = new FormData();
+
+      const imageData = data.image[0]
+      formData.append('image', imageData);
+
+      const image_API_URL = `https://api.imgbb.com/1/upload?expiration=600&key=${import.meta.env.VITE_image_host_key}`
+
+      const res = await axios.post(image_API_URL, formData);
+        const uploadedImgURL = res.data.data.url;
+        const finalData = {
+            title: data.title,
+            description: data.description,
+            category: data.category,
+            emotionalTone: data.emotionalTone,
+            privacy: data.privacy,
+            accessLevel: data.accessLevel,
+            image:uploadedImgURL, 
+        };
+         
 
       // API call to save lesson
-      const response = await fetch('/api/lessons/create', {
-        method: 'POST',
-        body: formData,
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You are add this life lessons ",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, submit it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axiosSecure.post('/life_lessons', finalData)
+            .then(res => {
+              console.log('After data post ', res.data)
+              reset();
+              
+              if (res.data.insertedId) {
+                Swal.fire({
+                  title: "Submite",
+                  text: "Your file has been successfully submit.",
+                  icon: "success"
+                });
+              }
+            })
+
+        }
       });
 
-      if (response.ok) {
-        toast.success('Lesson created successfully!');
-        reset();
-        setImagePreview(null);
-      } else {
-        throw new Error('Failed to create lesson');
-      }
+
     } catch (error) {
       toast.error('Error creating lesson. Please try again.');
       console.error('Error:', error);
@@ -79,7 +99,7 @@ const AddLessons = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-primary/5 py-12 px-4">
       <div className="max-w-4xl mx-auto">
-        
+
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -93,14 +113,14 @@ const AddLessons = () => {
         {/* Main Form */}
         <div className="bg-white rounded-2xl shadow-xl p-6 md:p-10">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-            
+
             {/* Lesson Title */}
             <div>
               <label className="block text-lg font-semibold text-gray-800 mb-3">
                 Lesson Title
               </label>
               <input
-                {...register("title", { 
+                {...register("title", {
                   required: "Title is required",
                   minLength: {
                     value: 5,
@@ -123,10 +143,10 @@ const AddLessons = () => {
             {/* Description */}
             <div>
               <label className="block text-lg font-semibold text-gray-800 mb-3">
-                Your Story 
+                Your Story
               </label>
               <textarea
-                {...register("description", { 
+                {...register("description", {
                   required: "Description is required",
                   minLength: {
                     value: 5,
@@ -157,7 +177,7 @@ const AddLessons = () => {
 
             {/* Category & Emotional Tone - Side by Side */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              
+
               {/* Category */}
               <div>
                 <label className="block text-lg font-semibold text-gray-800 mb-3">
@@ -218,7 +238,7 @@ const AddLessons = () => {
                   Add a photo that represents your story
                 </span>
               </label>
-              
+
               <div className="flex flex-col md:flex-row gap-6">
                 {/* Upload Area */}
                 <div className="flex-1">
@@ -228,52 +248,27 @@ const AddLessons = () => {
                       {...register("image")}
                       type="file"
                       accept="image/*"
-                      onChange={handleImageChange}
-                      className="hidden"
-                      id="image-upload"
+
+                      className="file-input bg-primary text-white border-none"
+
                     />
                     <label htmlFor="image-upload" className="cursor-pointer">
                       <div className="text-gray-600 mb-2">
                         <span className="text-primary font-medium">Click to upload</span> or drag and drop
                       </div>
                       <p className="text-sm text-gray-500">
-                        PNG, JPG, GIF up to 5MB
+                        PNG, JPG, GIF
                       </p>
                     </label>
                   </div>
                 </div>
 
-                {/* Preview Area */}
-                {imagePreview && (
-                  <div className="flex-1">
-                    <div className="border border-gray-200 rounded-xl p-4">
-                      <p className="text-sm text-gray-600 mb-2">Preview:</p>
-                      <div className="relative w-full h-48 rounded-lg overflow-hidden">
-                        <img 
-                          src={imagePreview} 
-                          alt="Preview" 
-                          className="w-full h-full object-cover"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setImagePreview(null);
-                            reset({ image: null });
-                          }}
-                          className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
 
             {/* Privacy & Access Level */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              
+
               {/* Privacy */}
               <div>
                 <label className="block text-lg font-semibold text-gray-800 mb-3">
@@ -289,18 +284,10 @@ const AddLessons = () => {
                     {...register("privacy", { required: true })}
                     className="select select-bordered w-full bg-gray-50 pl-10"
                   >
-                    <option value="public">
-                      <div className="flex items-center">
-                        <FiGlobe className="mr-2" />
-                        Public - Anyone can view
-                      </div>
-                    </option>
-                    <option value="private">
-                      <div className="flex items-center">
-                        <FiLock className="mr-2" />
-                        Private - Only me
-                      </div>
-                    </option>
+
+                    <option value="public">Public</option>
+                    <option value="private">Private</option>
+
                   </select>
                   <div className="absolute left-3 top-3">
                     {watch('privacy') === 'public' ? (
@@ -329,16 +316,13 @@ const AddLessons = () => {
                     className={`select select-bordered w-full bg-gray-50 pl-10 ${!isPremiumUser ? 'opacity-70 cursor-not-allowed' : ''}`}
                   >
                     <option value="free">
-                      <div className="flex items-center">
-                        <span className="mr-2">🎁</span>
-                        Free - Available to all
-                      </div>
+                      🎁 Free - Available to all
+
                     </option>
                     <option value="premium">
-                      <div className="flex items-center">
-                        <FiDollarSign className="mr-2" />
-                        Premium - Paid access only
-                      </div>
+
+                      $ Premium - Paid access only
+
                     </option>
                   </select>
                   <div className="absolute left-3 top-3">
@@ -348,7 +332,7 @@ const AddLessons = () => {
                       <FiDollarSign className="text-gray-500" />
                     )}
                   </div>
-                  
+
                   {/* Tooltip for non-premium users */}
                   {!isPremiumUser && (
                     <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
@@ -357,7 +341,7 @@ const AddLessons = () => {
                       </p>
                     </div>
                   )}
-                  
+
                   {/* Premium badge for premium users */}
                   {isPremiumUser && watchAccessLevel === 'premium' && (
                     <div className="mt-2 p-2 bg-gradient-to-r from-[#cca3b3] to-[#b58998] text-white rounded-lg text-center">
@@ -376,7 +360,7 @@ const AddLessons = () => {
                 <div className="text-sm text-gray-600">
                   <p>By sharing your lesson, you agree to our <a href="#" className="text-primary hover:underline">Community Guidelines</a></p>
                 </div>
-                
+
                 <div className="flex gap-4">
                   <button
                     type="button"
@@ -389,7 +373,7 @@ const AddLessons = () => {
                   >
                     Clear All
                   </button>
-                  
+
                   <button
                     type="submit"
                     disabled={isSubmitting}
@@ -445,6 +429,7 @@ const AddLessons = () => {
         </div>
 
       </div>
+      <ToastContainer></ToastContainer>
     </div>
   );
 };
