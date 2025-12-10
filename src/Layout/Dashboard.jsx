@@ -1,5 +1,6 @@
 import React from 'react';
 import { BiSolidMessageSquareAdd } from 'react-icons/bi';
+import { FaUserTag } from 'react-icons/fa';
 import { Link, Outlet } from 'react-router';
 import { NavLink } from 'react-router';
 
@@ -19,6 +20,7 @@ const Dashboard = () => {
                     </nav>
                     {/* Page content here */}
                     <div className='max-w-11/12 mx-auto'>
+                
                         <Outlet></Outlet>
                     </div>
                 </div>
@@ -38,11 +40,18 @@ const Dashboard = () => {
                                     <NavLink to='/'><span className="is-drawer-close:hidden">Homepage</span></NavLink>
                                 </button>
                             </li>
-
+                           {/* add lessons */}
                             <li>
                                 <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Add Lessons">
                                     <Link to='/dashboard/add-lessons'><BiSolidMessageSquareAdd /></Link>
                                     <NavLink to='/dashboard/add-lessons'><span className="is-drawer-close:hidden">Add Lessons</span></NavLink>
+                                </button>
+                            </li>
+                            {/* my lessons */}
+                            <li>
+                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Lessons">
+                                    <Link to='/dashboard/my-lessons'><FaUserTag /></Link>
+                                    <NavLink to='/dashboard/my-lessons'><span className="is-drawer-close:hidden">My Lessons</span></NavLink>
                                 </button>
                             </li>
 

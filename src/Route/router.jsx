@@ -7,6 +7,7 @@ import Login from '../Page/Auth/Login/Login';
 import Register from '../Page/Auth/Register/Register';
 import Dashboard from '../Layout/Dashboard';
 import AddLessons from '../Page/AddLessons/AddLessons';
+import MyLessons from '../Page/MyLessons/MyLessons';
 
 const router=createBrowserRouter([
     {
@@ -41,7 +42,11 @@ const router=createBrowserRouter([
             {
                 path:'add-lessons',
                 Component:AddLessons
-            }
+            },
+             {
+                path:'my-lessons',
+                Component:MyLessons
+             }
         ]
     }
 ])

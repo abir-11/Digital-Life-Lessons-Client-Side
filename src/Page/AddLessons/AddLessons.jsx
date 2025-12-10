@@ -6,20 +6,19 @@ import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
 const AddLessons = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const isPremiumUser = user?.isPremium || false; // Adjust based on your auth structure
 
   const {
     register,
     handleSubmit,
     watch,
     reset,
-    formState: { errors },
+    formState: { errors ,isSubmitting},
   } = useForm({
     defaultValues: {
       privacy: 'public',
@@ -30,11 +29,20 @@ const AddLessons = () => {
   const watchAccessLevel = watch('accessLevel');
 
 
-
+  const {data:userData,isLoading}=useQuery({
+    queryKey:['users',user?.email],
+    queryFn:async()=>{
+       const res=await axiosSecure.get(`/users/${user?.email}`);
+       return res.data;
+    }
+  })
+  if(isLoading){
+    return <p className='text-primary flex justify-center items-center-safe mt-5'>Loading...</p>
+  }
+  console.log(userData);
 
   // Form submission
   const onSubmit = async (data) => {
-    setIsSubmitting(true);
 
     try {
       // Create FormData for file upload
@@ -91,8 +99,6 @@ const AddLessons = () => {
     } catch (error) {
       toast.error('Error creating lesson. Please try again.');
       console.error('Error:', error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -304,7 +310,7 @@ const AddLessons = () => {
                 <label className="block text-lg font-semibold text-gray-800 mb-3">
                   <div className="flex items-center gap-2">
                     Access Level
-                    <div className="tooltip" data-tip={!isPremiumUser ? "Upgrade to Premium to create paid lessons" : "Set lesson pricing"}>
+                    <div className="tooltip" data-tip={!userData.isPremium ? "Upgrade to Premium to create paid lessons" : "Set lesson pricing"}>
                       <FiHelpCircle className="w-4 h-4 text-gray-400" />
                     </div>
                   </div>
@@ -312,11 +318,11 @@ const AddLessons = () => {
                 <div className="relative">
                   <select
                     {...register("accessLevel", { required: true })}
-                    disabled={!isPremiumUser}
-                    className={`select select-bordered w-full bg-gray-50 pl-10 ${!isPremiumUser ? 'opacity-70 cursor-not-allowed' : ''}`}
+                    disabled={!userData.isPremium}
+                    className={`select select-bordered w-full bg-gray-50 pl-10 ${!userData.isPremium ? 'opacity-70 cursor-not-allowed' : ''}`}
                   >
                     <option value="free">
-                      🎁 Free - Available to all
+                       Free - Available to all
 
                     </option>
                     <option value="premium">
@@ -334,7 +340,7 @@ const AddLessons = () => {
                   </div>
 
                   {/* Tooltip for non-premium users */}
-                  {!isPremiumUser && (
+                  {!userData.isPremium && (
                     <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                       <p className="text-sm text-yellow-800">
                         ⚡ <span className="font-medium">Upgrade to Premium</span> to create paid lessons and earn from your experiences.
@@ -343,7 +349,7 @@ const AddLessons = () => {
                   )}
 
                   {/* Premium badge for premium users */}
-                  {isPremiumUser && watchAccessLevel === 'premium' && (
+                  {userData.isPremium && watchAccessLevel === 'premium' && (
                     <div className="mt-2 p-2 bg-gradient-to-r from-[#cca3b3] to-[#b58998] text-white rounded-lg text-center">
                       <p className="text-sm font-medium">
                         💎 Premium Lesson - You'll earn from each view
@@ -366,7 +372,7 @@ const AddLessons = () => {
                     type="button"
                     onClick={() => {
                       reset();
-                      setImagePreview(null);
+                     
                     }}
                     className="btn btn-outline px-8"
                     disabled={isSubmitting}
