@@ -8,7 +8,7 @@ import { BiSolidLike } from 'react-icons/bi';
 
 const MyLessons = () => {
     const axiosSecure = useAxiosSecure();
-    const { data: userData, isLoading } = useQuery({
+    const { data: userPost, isLoading } = useQuery({
         queryKey: ['life-lesson'],
         queryFn: async () => {
             const res = await axiosSecure.get('/life_lessons')
@@ -20,7 +20,7 @@ const MyLessons = () => {
     }
     return (
         <div>
-            <div>My all Lessons:{userData.length}</div>
+            <div>My all Lessons:{userPost.length}</div>
             <div className="overflow-x-auto">
                 <table className="table text-center">
                     <thead>
@@ -37,24 +37,24 @@ const MyLessons = () => {
                         {userPost.map((p, index) => (
                             <tr key={p._id} className="h-32 hover:bg-base-200"> 
                                 {/* Index */}
-                                <td className="align-middle h-full">
+                                <th className="align-middle h-full">
                                     <div className="flex items-center justify-center h-full">
                                         {index + 1}
                                     </div>
-                                </td>
+                                </th>
 
                                 {/* Title */}
-                                <td className="align-middle h-full">
+                                <th className="align-middle h-full">
                                     <div className="flex items-center justify-center h-full">
                                         {p.title}
                                     </div>
-                                </td>
+                                </th>
 
                                 {/* Visibility */}
                                 <td className="align-middle h-full">
                                     <div className="flex items-center justify-center h-full">
                                         <select className="select select-bordered w-full max-w-xs">
-                                            <option value="public" className="text-white bg-primary">Public</option>
+                                            <option value="public" className="text-white bg-primary mb-1">Public</option>
                                             <option value="private" className="text-white bg-primary">Private</option>
                                         </select>
                                     </div>
@@ -64,7 +64,7 @@ const MyLessons = () => {
                                 <td className="align-middle h-full">
                                     <div className="flex items-center justify-center h-full">
                                         <select className="select select-bordered w-full max-w-xs">
-                                            <option value="public" className="text-white bg-primary">Public</option>
+                                            <option value="public" className="text-white bg-primary mb-1">Public</option>
                                             <option value="premium" className="text-white bg-primary">Premium</option>
                                         </select>
                                     </div>
