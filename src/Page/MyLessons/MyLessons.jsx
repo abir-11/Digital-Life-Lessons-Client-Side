@@ -7,6 +7,7 @@ import { FaRegEdit } from 'react-icons/fa';
 import { BiSolidLike } from 'react-icons/bi';
 
 const MyLessons = () => {
+
     const axiosSecure = useAxiosSecure();
     const { data: userPost, isLoading } = useQuery({
         queryKey: ['life-lesson'],
@@ -18,6 +19,7 @@ const MyLessons = () => {
     if (isLoading) {
         return <p className='text-primary flex justify-center items-center-safe mt-5'>Loading...</p>
     }
+
     return (
         <div>
             <div>My all Lessons:{userPost.length}</div>
@@ -35,7 +37,7 @@ const MyLessons = () => {
                     </thead>
                     <tbody>
                         {userPost.map((p, index) => (
-                            <tr key={p._id} className="h-32 hover:bg-base-200"> 
+                            <tr key={p._id} className="h-32 hover:bg-base-200">
                                 {/* Index */}
                                 <th className="align-middle h-full">
                                     <div className="flex items-center justify-center h-full">
@@ -75,7 +77,9 @@ const MyLessons = () => {
                                     <div className="flex flex-col items-center justify-center h-full min-h-[100px]">
                                         <div className="mb-2">
                                             <span className="text-sm font-bold">Create Date:</span>
-                                            <div className="text-xs">{p.createAt}</div>
+                                            <div className="text-xs"><span className="text-gray-500">
+                                                {new Date(p?.createAt).toLocaleDateString()}
+                                            </span></div>
                                         </div>
                                         <div className="mb-2">
                                             <span className="text-sm font-bold">Reactions Count:</span>
@@ -83,7 +87,7 @@ const MyLessons = () => {
                                         </div>
                                         <div>
                                             <span className="text-sm font-bold">Favorites Count:</span>
-                                            <span className="badge badge-primary ml-1"><FcLike/> (0)</span>
+                                            <span className="badge badge-primary ml-1"><FcLike /> (0)</span>
                                         </div>
                                     </div>
                                 </td>

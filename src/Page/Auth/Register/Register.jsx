@@ -36,7 +36,7 @@ const Register = () => {
           .then(res => {
             console.log("After image uplodate", res.data.data.url);
             const userInfo={
-              displayName:data.name,
+              displayName:data.displayName,
               email:data.email,
               photoURL:res.data.data.url
             }
@@ -48,7 +48,7 @@ const Register = () => {
             })
 
             const userProfile={
-              displayName:data.name,
+              displayName:data.displayName,
               photoURL:res.data.data.url
             }
             updateUserProfie(userProfile)

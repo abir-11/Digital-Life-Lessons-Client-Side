@@ -41,7 +41,7 @@ const Login = () => {
 
         console.log("Google User:", user);
         const userInfo = {
-          diplayName: user.displayName,
+          displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL
         }

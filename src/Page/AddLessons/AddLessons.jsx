@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const AddLessons = () => {
   const { user } = useAuth();
+  
   const axiosSecure = useAxiosSecure();
 
 
@@ -39,7 +40,8 @@ const AddLessons = () => {
   if(isLoading){
     return <p className='text-primary flex justify-center items-center-safe mt-5'>Loading...</p>
   }
-  console.log(userData);
+  
+  //console.log(userData);
 
   // Form submission
   const onSubmit = async (data) => {
@@ -56,6 +58,7 @@ const AddLessons = () => {
 
       const res = await axios.post(image_API_URL, formData);
         const uploadedImgURL = res.data.data.url;
+        console.log(uploadedImgURL);
         const finalData = {
             title: data.title,
             description: data.description,
@@ -66,7 +69,7 @@ const AddLessons = () => {
             image:uploadedImgURL, 
         };
          
-
+      
       // API call to save lesson
       Swal.fire({
         title: "Are you sure?",
@@ -101,6 +104,7 @@ const AddLessons = () => {
       console.error('Error:', error);
     }
   };
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-primary/5 py-12 px-4">
