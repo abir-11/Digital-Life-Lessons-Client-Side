@@ -44,66 +44,75 @@ const AddLessons = () => {
   //console.log(userData);
 
   // Form submission
-  const onSubmit = async (data) => {
+ const onSubmit = async (data) => {
+  try {
+    let uploadedImgURL = ''; 
 
-    try {
-      // Create FormData for file upload
-      
+   
+    if (data.image && data.image.length > 0) {
       const formData = new FormData();
+      formData.append('image', data.image[0]);
 
-      const imageData = data.image[0]
-      formData.append('image', imageData);
-
-      const image_API_URL = `https://api.imgbb.com/1/upload?expiration=600&key=${import.meta.env.VITE_image_host_key}`
+      const image_API_URL = `https://api.imgbb.com/1/upload?expiration=600&key=${import.meta.env.VITE_image_host_key}`;
 
       const res = await axios.post(image_API_URL, formData);
-        const uploadedImgURL = res.data.data.url;
-        console.log(uploadedImgURL);
-        const finalData = {
-            title: data.title,
-            description: data.description,
-            category: data.category,
-            emotionalTone: data.emotionalTone,
-            privacy: data.privacy,
-            accessLevel: data.accessLevel,
-            image:uploadedImgURL, 
-        };
-         
-      
-      // API call to save lesson
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You are add this life lessons ",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, submit it!"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          axiosSecure.post('/life_lessons', finalData)
-            .then(res => {
-              console.log('After data post ', res.data)
-              reset();
-              
-              if (res.data.insertedId) {
-                Swal.fire({
-                  title: "Submite",
-                  text: "Your file has been successfully submit.",
-                  icon: "success"
-                });
-              }
-            })
-
-        }
-      });
-
-
-    } catch (error) {
-      toast.error('Error creating lesson. Please try again.');
-      console.error('Error:', error);
+      uploadedImgURL = res.data.data.url;
+      console.log('Uploaded image URL:', uploadedImgURL);
     }
-  };
+
+    
+    const finalData = {
+      email: user.email,
+      title: data.title,
+      description: data.description,
+      category: data.category,
+      emotionalTone: data.emotionalTone,
+      privacy: data.privacy,
+      accessLevel: data.accessLevel,
+      image: uploadedImgURL, 
+    };
+
+    
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You are adding this life lesson",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, submit it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.post('/life_lessons', finalData)
+          .then(res => {
+            console.log('After data post', res.data);
+            reset(); 
+
+            if (res.data.insertedId) {
+              Swal.fire({
+                title: "Submitted",
+                text: "Your lesson has been successfully submitted.",
+                icon: "success"
+              });
+            }
+          })
+          .catch(err => {
+            console.error('Error posting lesson:', err);
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong while submitting your lesson!'
+            });
+          });
+      }
+    });
+
+  } catch (error) {
+    console.error('Error creating lesson:', error);
+    toast.error('Error creating lesson. Please try again.');
+  }
+};
+
   
 
   return (
