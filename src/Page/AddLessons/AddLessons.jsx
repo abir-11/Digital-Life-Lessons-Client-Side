@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const AddLessons = () => {
   const { user } = useAuth();
+  //console.log(user);
   
   const axiosSecure = useAxiosSecure();
 
@@ -63,6 +64,8 @@ const AddLessons = () => {
     
     const finalData = {
       email: user.email,
+      name:user.displayName,
+      photoURL:user.photoURL,
       title: data.title,
       description: data.description,
       category: data.category,

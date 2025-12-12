@@ -1,14 +1,15 @@
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import life from '../../../assets/HeroImg/image.png'
 import useAuth from "../../../Hooks/useAuth";
 
 const Navbar = () => {
     const { user, logOut, loading } = useAuth();
+    const navigate=useNavigate();
     //console.log(user);
     const handleLogOut = () => {
         logOut()
             .then(res => {
-
+             navigate('/login')
             })
             .catch(error => {
                 console.log(error);
@@ -159,7 +160,10 @@ const Navbar = () => {
 
 
                                 <li className="font-base px-3 py-1 rounded-xl   hover:bg-primary hover:text-white text-xl">
-                                    <button onClick={handleLogOut}>Logout</button>
+                                    <button onClick={handleLogOut}>
+                                        Logout
+                                        
+                                    </button>
                                 </li>
                             </ul>
                         </div>

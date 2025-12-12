@@ -10,6 +10,7 @@ import AddLessons from '../Page/AddLessons/AddLessons';
 import MyLessons from '../Page/MyLessons/MyLessons';
 import PublicLessons from '../Page/PublicLessons/PublicLessons';
 import DetailsPage from '../Page/DetailsPage/DetailsPage';
+import Author from '../Page/Author/Author';
 
 const router = createBrowserRouter([
     {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
             {
                 path:'/details-lesson/:id',
                 Component:DetailsPage
+            },
+            {
+                path:'/author/:email',
+                Component:Author
             }
 
         ]

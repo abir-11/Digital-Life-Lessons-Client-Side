@@ -10,12 +10,52 @@ import { LiaHeartSolid } from "react-icons/lia";
 import { IoIosHeart } from "react-icons/io";
 import Swal from 'sweetalert2';
 import ReportLessonModal from './ReportLessonModal';
+import { useForm } from 'react-hook-form';
 
 const DetailsPage = () => {
     const { id } = useParams();
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const [showReportModal, setShowReportModal] = useState(false);
+    const { handleSubmit, register, reset, formState: { errors } } = useForm();
+
+    const onSubmit = (data) => {
+
+        if (!user?.email) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Login Required',
+                text: 'Please login to report this lesson',
+            });
+            return;
+        }
+
+        const commentData = {
+            action: "comment",
+            userEmail: user?.email,
+            comment: data?.Comment
+        };
+
+
+        axiosSecure.patch(`/life_lessons/${id}`, commentData)
+            .then(res => {
+                console.log('After comment submit', res.data);
+                reset();
+
+                if (res.data.modifiedCount > 0) {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Comment Submitted",
+                        timer: 1500
+                    });
+                }
+            })
+            .catch(err => {
+                console.error("Comment submit error:", err);
+            });
+    };
+
 
     const { data: singleLesson, isLoading, refetch } = useQuery({
         queryKey: ['life_lessons', id],
@@ -26,13 +66,15 @@ const DetailsPage = () => {
     });
 
     const { data: userData } = useQuery({
-        queryKey: ['life_lessons', user?.email],
-        enabled: !!user?.email,
+        queryKey: ['lessonCount', singleLesson?.email],
+        enabled: !!singleLesson?.email,
         queryFn: async () => {
-            const res = await axiosSecure.get(`/life_lessons/email/${user?.email}`);
+            const res = await axiosSecure.get(`/life_lessons/count/${singleLesson?.email}`);
             return res.data;
         }
     });
+
+
 
     const { data: users } = useQuery({
         queryKey: ["users", user?.email],
@@ -89,13 +131,16 @@ const DetailsPage = () => {
     const handleFavorite = async () => {
         try {
             const res = await axiosSecure.patch(`/life_lessons/${singleLesson._id}`, {
-                action: 'favorite'
+                action: 'favorite',
+                userEmail: user.email
             });
 
-            if (res.data.modifiedCount) {
+            if (res.data.modifiedCount || res.data.status) {
                 refetch();
-                const newFavoriteStatus = singleLesson.favorites === "Add" ? "Remove" : "Add";
-                const message = newFavoriteStatus === "Add" ? "Added to Favorites!" : "Removed from Favorites!";
+
+                const alreadyFav = singleLesson.favoriteUsers?.some(u => u.email === user.email);
+                const message = alreadyFav ? "Removed from Favorites!" : "Added to Favorites!";
+
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
@@ -104,6 +149,7 @@ const DetailsPage = () => {
                     timer: 1500
                 });
             }
+
         } catch (err) {
             console.error(err);
             Swal.fire({
@@ -114,6 +160,9 @@ const DetailsPage = () => {
         }
     };
 
+
+
+
     if (isLoading) {
         return (
             <p className="text-primary flex justify-center items-center mt-5">
@@ -121,6 +170,7 @@ const DetailsPage = () => {
             </p>
         );
     }
+    console.log(userData);
 
     if (!singleLesson) {
         return <div className="text-center mt-10">Lesson not found</div>;
@@ -207,15 +257,15 @@ const DetailsPage = () => {
                                         {/* Favorite Section */}
                                         <div className='flex items-center gap-2'>
                                             <h1 className='flex items-center font-bold gap-2'>
-                                                <span className='inline-block'>🔖Favorites</span>:
+                                                <span className='inline-block'>🔖 Favorites</span>:
                                             </h1>
                                             <div>
-                                                {singleLesson.favorites === "Add" ? (
+                                                {singleLesson.favoriteUsers?.some(u => u.email === user?.email) ? (
                                                     <button
                                                         onClick={handleFavorite}
                                                         className='text-white border-none btn btn-sm bg-red-500'
                                                     >
-                                                        Remove
+                                                        Unsave
                                                     </button>
                                                 ) : (
                                                     <button
@@ -226,7 +276,9 @@ const DetailsPage = () => {
                                                     </button>
                                                 )}
                                             </div>
+
                                         </div>
+
                                     </div>
 
                                     <div>
@@ -234,22 +286,46 @@ const DetailsPage = () => {
                                         <button onClick={() => setShowReportModal(true)} className="btn w-full bg-primary hover:bg-[#b58998] text-white mt-2">
                                             Report Lessons
                                         </button>
-                                      
 
-                                    {/* Report Modal */}
-                                    <ReportLessonModal
-                                        lesson={singleLesson}
-                                        isOpen={showReportModal}
-                                        onClose={() => setShowReportModal(false)}
-                                        refetch={refetch}
-                                    />
-                               
+
+                                        {/* Report Modal */}
+                                        <ReportLessonModal
+                                            lesson={singleLesson}
+                                            isOpen={showReportModal}
+                                            onClose={() => setShowReportModal(false)}
+                                            refetch={refetch}
+                                        />
+
 
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {/* comment section */}
+                    <div className='max-w-2xl mx-auto bg-white  shadow-lg rounded-2xl p-6 mt-8'>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Comment
+                            </label>
+                            <form onSubmit={handleSubmit(onSubmit)} >
+                                <textarea
+                                    {...register("Comment")}
+                                    rows={4}
+                                    placeholder="Please provide any additional information that might help us understand your comment..."
+                                    className="textarea textarea-bordered w-full bg-gray-50 resize-none"
+                                    maxLength={500}
+                                />
+                                <button className="btn w-full bg-primary hover:bg-[#b58998] text-white mt-2">
+                                    Submit
+                                </button>
+                            </form>
+                            <p className="text-xs text-gray-500 mt-1">
+                                Maximum 500 characters
+                            </p>
+                        </div>
+                    </div>
+
 
                     {/* Creator Section */}
                     {users && (
@@ -262,22 +338,22 @@ const DetailsPage = () => {
                                     <div className='flex flex-col-reverse sm:flex-row justify-center gap-10 items-center'>
                                         <div>
                                             <h1 className="inline-block bg-yellow-100 text-yellow-800 px-3 py-1 rounded-xl font-medium w-fit">
-                                                Creator Name: <span className='font-bold'>{users?.displayName}</span>
+                                                Creator Name: <span className='font-bold'>{singleLesson?.name}</span>
                                             </h1>
                                             <h1 className="my-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-xl font-medium w-fit">
-                                                Total Lessons Created: {userData?.length || 0}
+                                                Total Lessons Created: {userData?.count || 0}
                                             </h1>
                                         </div>
                                         <div>
                                             <img
-                                                src={users?.photoURL}
-                                                alt={users?.displayName}
+                                                src={singleLesson?.photoURL}
+                                                alt={singleLesson?.name}
                                                 className='w-24 h-24 rounded-xl object-cover'
                                             />
                                         </div>
                                     </div>
                                     <div>
-                                        <Link to={`/lessons/author/${users?.email}`}>
+                                        <Link to={`/author/${singleLesson?.email}`}>
                                             <button className="btn w-full bg-primary hover:bg-[#b58998] text-white mt-2">
                                                 View all lessons by author
                                             </button>

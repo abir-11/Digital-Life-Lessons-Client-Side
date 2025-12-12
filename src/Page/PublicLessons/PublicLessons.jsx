@@ -37,7 +37,7 @@ const PublicLessons = () => {
 
     );
   }
-  console.log(users);
+  //console.log(users);
   //console.log(users.isPremium);
 
 
@@ -72,11 +72,11 @@ const PublicLessons = () => {
                 {/* Creator Info */}
                 <div className="flex items-center gap-3 mb-3">
                   <img
-                    src={users?.photoURL}
+                    src={lesson?.photoURL}
                     alt="creator"
                     className="w-10 h-10 rounded-full"
                   />
-                  <p className="font-semibold">{users?.displayName}</p>
+                  <p className="font-semibold">{lesson?.name}</p>
                 </div>
 
                 {/* Lesson Title */}
