@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
-import { Link, useParams } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router';
 import { GiLifeBar } from "react-icons/gi";
 import { ImManWoman } from "react-icons/im";
 import useAuth from '../../Hooks/useAuth';
@@ -11,9 +11,11 @@ import { IoIosHeart } from "react-icons/io";
 import Swal from 'sweetalert2';
 import ReportLessonModal from './ReportLessonModal';
 import { useForm } from 'react-hook-form';
+import RelatedCard from './RelatedCard';
 
 const DetailsPage = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const [showReportModal, setShowReportModal] = useState(false);
@@ -32,6 +34,7 @@ const DetailsPage = () => {
 
         const commentData = {
             action: "comment",
+            photoURL: user?.photoURL,
             userEmail: user?.email,
             comment: data?.Comment
         };
@@ -64,6 +67,8 @@ const DetailsPage = () => {
             return res.data;
         }
     });
+
+   
 
     const { data: userData } = useQuery({
         queryKey: ['lessonCount', singleLesson?.email],
@@ -170,7 +175,7 @@ const DetailsPage = () => {
             </p>
         );
     }
-    console.log(userData);
+    
 
     if (!singleLesson) {
         return <div className="text-center mt-10">Lesson not found</div>;
@@ -325,6 +330,9 @@ const DetailsPage = () => {
                             </p>
                         </div>
                     </div>
+                    
+                    
+
 
 
                     {/* Creator Section */}
@@ -363,6 +371,38 @@ const DetailsPage = () => {
                             </div>
                         </div>
                     )}
+                    
+                   {/*  Similar and Recommended Lessons */}
+                   <RelatedCard></RelatedCard>
+
+
+                    {/* Comment section */}
+                    <div className=' my-10'>
+                        <div>
+                            <h1 className='flex justify-center font-bold text-2xl bg-amber-50 rounded-2xl text-amber-300'>Lessons Comment</h1>
+                        </div>
+                        <div>
+                            {
+                                singleLesson.comments?.map((comment, index) =>
+                                    <div key={index} >
+                                        <div className='bg-white max-w-sm mx-auto rounded-xl shadow-2xl  p-5 my-5'>
+
+                                            <div className='flex items-center justify-between gap-5'>
+                                                <img src={comment?.photoURL} alt="" className='w-12 h-12 rounded-full' />
+                                                <span className='bg-blue-50 p-2 rounded-2xl my-2 text-blue-600 text-sm'>{comment?.userEmail
+                                                }</span>
+                                            </div>
+                                            <div>
+                                                <p className='font-bold text-sm my-2 '>{comment.
+                                                    comment}</p>
+                                                <span className='bg-gray-50 p-1 rounded-full text-gray-500 text-sm my-2 '>{new Date(comment?.time).toLocaleDateString()}</span>
+                                            </div>
+                                        </div>
+                                    </div>)
+                            }
+                        </div>
+
+                    </div>
                 </div>
             </div >
         </div >

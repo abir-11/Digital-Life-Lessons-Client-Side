@@ -37,14 +37,14 @@ const PublicLessons = () => {
 
     );
   }
-  //console.log(users);
+  //console.log(userPost);
   //console.log(users.isPremium);
 
 
 
 
   return (
-    <div className="bg-gray-50">
+    <div className="max-w-11/12 mx-auto  min-h-screen my-10 rounded-2xl shadow-2xl">
       <div className="max-w-11/12 mx-auto  py-8">
         <h2 className="text-2xl font-bold mb-6 text-center">Public Life Lessons</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
