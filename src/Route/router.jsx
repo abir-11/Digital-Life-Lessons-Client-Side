@@ -11,6 +11,8 @@ import MyLessons from '../Page/MyLessons/MyLessons';
 import PublicLessons from '../Page/PublicLessons/PublicLessons';
 import DetailsPage from '../Page/DetailsPage/DetailsPage';
 import Author from '../Page/Author/Author';
+import UpdateLessons from '../Page/UpdateLessons/UpdateLessons';
+import MyFavorites from '../Page/MyFavorites/MyFavorites';
 
 const router = createBrowserRouter([
     {
@@ -32,6 +34,10 @@ const router = createBrowserRouter([
             {
                 path:'/author/:email',
                 Component:Author
+            },
+            {
+                path:'/pricing',
+                Component:UpdateLessons
             }
 
         ]
@@ -61,6 +67,10 @@ const router = createBrowserRouter([
             {
                 path: 'my-lessons',
                 Component: MyLessons
+            },
+            {
+                path:'my-favorites',
+                Component:MyFavorites
             }
         ]
     }

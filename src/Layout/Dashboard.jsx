@@ -3,6 +3,7 @@ import { BiSolidMessageSquareAdd } from 'react-icons/bi';
 import { FaUserTag } from 'react-icons/fa';
 import { Link, Outlet } from 'react-router';
 import { NavLink } from 'react-router';
+import { MdFavorite } from "react-icons/md";
 
 const Dashboard = () => {
     return (
@@ -52,6 +53,12 @@ const Dashboard = () => {
                                 <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Lessons">
                                     <Link to='/dashboard/my-lessons'><FaUserTag /></Link>
                                     <NavLink to='/dashboard/my-lessons'><span className="is-drawer-close:hidden">My Lessons</span></NavLink>
+                                </button>
+                            </li>
+                            <li>
+                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Lessons">
+                                    <Link to='/dashboard/my-favorites'><MdFavorite /></Link>
+                                    <NavLink to='/dashboard/my-favorites'><span className="is-drawer-close:hidden">My Favorites</span></NavLink>
                                 </button>
                             </li>
 

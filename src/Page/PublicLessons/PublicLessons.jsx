@@ -1,9 +1,10 @@
 import React from "react";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Lock } from "lucide-react";
 import useAuth from "../../Hooks/useAuth";
+import Swal from "sweetalert2";
 
 
 
@@ -11,6 +12,7 @@ import useAuth from "../../Hooks/useAuth";
 const PublicLessons = () => {
 
   const { user } = useAuth();
+  const navigate=useNavigate();
 
   const axiosSecure = useAxiosSecure();
 
@@ -63,9 +65,28 @@ const PublicLessons = () => {
               >
                 {/* Lock Overlay for Premium Blocked */}
                 {blocked && (
+
                   <div className="absolute inset-0 bg-black/40 backdrop-blur-sm rounded-xl flex flex-col justify-center items-center text-white">
                     <Lock size={32} />
                     <p className="mt-2 font-medium">Premium Lesson – Upgrade to view</p>
+                    <button
+                      onClick={() => {
+                        if (!user?.email) {
+                          Swal.fire({
+                            icon: 'warning',
+                            title: 'Login Required',
+                            text: 'Please login to update this lesson',
+                          });
+                          navigate('/login');
+                          return;
+                        }
+
+                        navigate('/pricing');
+                      }}
+                      className="w-full bg-primary text-center my-5 px-5 text-white py-2 rounded-lg hover:bg-primary/80"
+                    >
+                      Update Lesson
+                    </button>
                   </div>
                 )}
 

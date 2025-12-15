@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import ReportLessonModal from './ReportLessonModal';
 import { useForm } from 'react-hook-form';
 import RelatedCard from './RelatedCard';
+import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
 
 const DetailsPage = () => {
     const { id } = useParams();
@@ -29,7 +30,7 @@ const DetailsPage = () => {
                 title: 'Login Required',
                 text: 'Please login to report this lesson',
             });
-            return;
+            return navigate('/login');
         }
 
         const commentData = {
@@ -68,7 +69,7 @@ const DetailsPage = () => {
         }
     });
 
-   
+
 
     const { data: userData } = useQuery({
         queryKey: ['lessonCount', singleLesson?.email],
@@ -100,9 +101,9 @@ const DetailsPage = () => {
             Swal.fire({
                 icon: 'warning',
                 title: 'Login Required',
-                text: 'Please login to like this lesson',
+                text: 'Please login to report this lesson',
             });
-            return;
+            return navigate('/login');
         }
 
         try {
@@ -134,6 +135,14 @@ const DetailsPage = () => {
 
     // Handle Favorite Toggle
     const handleFavorite = async () => {
+        if (!user?.email) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Login Required',
+                text: 'Please login to report this lesson',
+            });
+            return navigate('/login');
+        }
         try {
             const res = await axiosSecure.patch(`/life_lessons/${singleLesson._id}`, {
                 action: 'favorite',
@@ -175,7 +184,11 @@ const DetailsPage = () => {
             </p>
         );
     }
-    
+    const shareUrl = window?.location.href;
+
+    const shareTitle = singleLesson?.title;
+    const shareDescription = singleLesson?.description;
+
 
     if (!singleLesson) {
         return <div className="text-center mt-10">Lesson not found</div>;
@@ -285,7 +298,7 @@ const DetailsPage = () => {
                                         </div>
 
                                     </div>
-
+                                   
                                     <div>
 
                                         <button onClick={() => setShowReportModal(true)} className="btn w-full bg-primary hover:bg-[#b58998] text-white mt-2">
@@ -303,6 +316,46 @@ const DetailsPage = () => {
 
 
                                     </div>
+                                     {/* share option */}
+                                    <div>
+                                        <div className="max-w-lg mx-auto my-5 shadow-lg rounded-sm p-5">
+                                            <h1 className="text-center text-primary font-bold mb-3">Share this lesson</h1>
+
+                                            <div className="flex justify-center gap-4">
+                                                <FacebookShareButton
+                                                    url={shareUrl}
+                                                    quote={shareTitle}
+                                                    hashtag="#LifeLessons"
+                                                >
+                                                    <FacebookIcon size={40} round />
+                                                </FacebookShareButton>
+
+                                                <WhatsappShareButton
+                                                    url={shareUrl}
+                                                    title={shareTitle}
+                                                >
+                                                    <WhatsappIcon size={40} round />
+                                                </WhatsappShareButton>
+
+                                                <TwitterShareButton
+                                                    url={shareUrl}
+                                                    title={shareTitle}
+                                                >
+                                                    <TwitterIcon size={40} round />
+                                                </TwitterShareButton>
+
+                                                <LinkedinShareButton
+                                                    url={shareUrl}
+                                                    title={shareTitle}
+                                                    summary={shareDescription}
+                                                >
+                                                    <LinkedinIcon size={40} round />
+                                                </LinkedinShareButton>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -330,8 +383,8 @@ const DetailsPage = () => {
                             </p>
                         </div>
                     </div>
-                    
-                    
+
+
 
 
 
@@ -371,9 +424,9 @@ const DetailsPage = () => {
                             </div>
                         </div>
                     )}
-                    
-                   {/*  Similar and Recommended Lessons */}
-                   <RelatedCard></RelatedCard>
+
+                    {/*  Similar and Recommended Lessons */}
+                    <RelatedCard></RelatedCard>
 
 
                     {/* Comment section */}

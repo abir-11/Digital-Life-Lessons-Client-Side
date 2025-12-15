@@ -75,7 +75,7 @@ const Navbar = () => {
                         }`
                     }
                 >
-                    Pricing
+                Pricing/Update
                 </NavLink>
             </li>
             </>
