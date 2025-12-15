@@ -1,9 +1,12 @@
 import { Link, NavLink, useNavigate } from "react-router";
 import life from '../../../assets/HeroImg/image.png'
 import useAuth from "../../../Hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 const Navbar = () => {
     const { user, logOut, loading } = useAuth();
+    const axiosSecure=useAxiosSecure();
     const navigate=useNavigate();
     //console.log(user);
     const handleLogOut = () => {
@@ -15,6 +18,14 @@ const Navbar = () => {
                 console.log(error);
             })
     }
+     const { data: userData = {} } = useQuery({
+        queryKey: ["user", user?.email],
+        enabled: !!user?.email,
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/users/${user?.email}`);
+            return res.data;
+        }
+    });
 
     const links = (
         <>
@@ -90,7 +101,7 @@ const Navbar = () => {
             </p>
         );
     }
-
+//console.log(userData);
     return (
         <div className="navbar bg-base-100 shadow-sm">
             <div className="navbar-start">
@@ -136,7 +147,7 @@ const Navbar = () => {
                         <div className="dropdown dropdown-end">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
-                                    <img src={user?.photoURL} alt="avatar" />
+                                    <img src={userData?.photoURL} alt="avatar" />
                                 </div>
                             </div>
 
@@ -146,7 +157,8 @@ const Navbar = () => {
                             >
                                 <li className="font-base px-5 py-1 rounded-xl   hover:bg-primary hover:text-white text-[12px]">
                                     {
-                                        user?.displayName
+                                        userData?.displayName
+
                                     }
                                 </li>
                                 <li className="font-base px-3 py-1 rounded-xl   hover:bg-primary hover:text-white text-xl">

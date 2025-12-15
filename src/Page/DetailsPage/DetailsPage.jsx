@@ -298,7 +298,7 @@ const DetailsPage = () => {
                                         </div>
 
                                     </div>
-                                   
+
                                     <div>
 
                                         <button onClick={() => setShowReportModal(true)} className="btn w-full bg-primary hover:bg-[#b58998] text-white mt-2">
@@ -316,7 +316,7 @@ const DetailsPage = () => {
 
 
                                     </div>
-                                     {/* share option */}
+                                    {/* share option */}
                                     <div>
                                         <div className="max-w-lg mx-auto my-5 shadow-lg rounded-sm p-5">
                                             <h1 className="text-center text-primary font-bold mb-3">Share this lesson</h1>
@@ -430,32 +430,55 @@ const DetailsPage = () => {
 
 
                     {/* Comment section */}
-                    <div className=' my-10'>
+                    <div className="my-10">
+                        {/* Title */}
                         <div>
-                            <h1 className='flex justify-center font-bold text-2xl bg-amber-50 rounded-2xl text-amber-300'>Lessons Comment</h1>
+                            <h1 className="flex justify-center font-bold text-2xl bg-amber-50 rounded-2xl text-amber-300 py-2">
+                                Lessons Comment
+                            </h1>
                         </div>
-                        <div>
-                            {
-                                singleLesson.comments?.map((comment, index) =>
-                                    <div key={index} >
-                                        <div className='bg-white max-w-sm mx-auto rounded-xl shadow-2xl  p-5 my-5'>
 
-                                            <div className='flex items-center justify-between gap-5'>
-                                                <img src={comment?.photoURL} alt="" className='w-12 h-12 rounded-full' />
-                                                <span className='bg-blue-50 p-2 rounded-2xl my-2 text-blue-600 text-sm'>{comment?.userEmail
-                                                }</span>
+                        {/* Comments */}
+                        <div>
+                            {singleLesson?.comments && singleLesson.comments.length > 0 ? (
+                                singleLesson.comments.map((comment, index) => (
+                                    <div key={index}>
+                                        <div className="bg-white max-w-sm mx-auto rounded-xl shadow-2xl p-5 my-5">
+
+                                            {/* User Info */}
+                                            <div className="flex items-center gap-3 mb-3">
+                                                <img
+                                                    src={comment?.photoURL || "/default-avatar.png"}
+                                                    alt="user"
+                                                    className="w-12 h-12 rounded-full"
+                                                />
+                                                <span className="bg-blue-50 px-3 py-1 rounded-2xl text-blue-600 text-sm">
+                                                    {comment?.userEmail || "Unknown User"}
+                                                </span>
                                             </div>
-                                            <div>
-                                                <p className='font-bold text-sm my-2 '>{comment.
-                                                    comment}</p>
-                                                <span className='bg-gray-50 p-1 rounded-full text-gray-500 text-sm my-2 '>{new Date(comment?.time).toLocaleDateString()}</span>
-                                            </div>
+
+                                            {/* Comment Text */}
+                                            <p className="font-bold text-sm mb-2">
+                                                {comment?.comment || "No comment text"}
+                                            </p>
+
+                                            {/* Date */}
+                                            <span className="inline-block bg-gray-50 px-3 py-1 rounded-full text-gray-500 text-sm">
+                                                {comment?.time
+                                                    ? new Date(comment.time).toLocaleDateString()
+                                                    : "Unknown Date"}
+                                            </span>
                                         </div>
-                                    </div>)
-                            }
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-center text-gray-400 mt-10">
+                                    No comments yet.
+                                </div>
+                            )}
                         </div>
-
                     </div>
+
                 </div>
             </div >
         </div >

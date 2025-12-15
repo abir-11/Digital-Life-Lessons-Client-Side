@@ -13,6 +13,8 @@ import DetailsPage from '../Page/DetailsPage/DetailsPage';
 import Author from '../Page/Author/Author';
 import UpdateLessons from '../Page/UpdateLessons/UpdateLessons';
 import MyFavorites from '../Page/MyFavorites/MyFavorites';
+import MyProfile from '../Page/MyProfile/MyProfile';
+import ProfileEdit from '../Page/MyProfile/ProfileEdit';
 
 const router = createBrowserRouter([
     {
@@ -71,6 +73,14 @@ const router = createBrowserRouter([
             {
                 path:'my-favorites',
                 Component:MyFavorites
+            },
+            {
+                path:'my-profile',
+                Component:MyProfile,
+            },
+            {
+                path:'profile-edit',
+                Component:ProfileEdit
             }
         ]
     }

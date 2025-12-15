@@ -64,8 +64,8 @@ const AddLessons = () => {
     
     const finalData = {
       email: user.email,
-      name:user.displayName,
-      photoURL:user.photoURL,
+      name:userData?.displayName,
+      photoURL:userData?.photoURL,
       title: data.title,
       description: data.description,
       category: data.category,

@@ -4,6 +4,7 @@ import { FaUserTag } from 'react-icons/fa';
 import { Link, Outlet } from 'react-router';
 import { NavLink } from 'react-router';
 import { MdFavorite } from "react-icons/md";
+import { CgProfile } from "react-icons/cg";
 
 const Dashboard = () => {
     return (
@@ -55,10 +56,18 @@ const Dashboard = () => {
                                     <NavLink to='/dashboard/my-lessons'><span className="is-drawer-close:hidden">My Lessons</span></NavLink>
                                 </button>
                             </li>
+                            {/* my Favorite-lessons */}
                             <li>
                                 <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Lessons">
                                     <Link to='/dashboard/my-favorites'><MdFavorite /></Link>
                                     <NavLink to='/dashboard/my-favorites'><span className="is-drawer-close:hidden">My Favorites</span></NavLink>
+                                </button>
+                            </li>
+                            {/* profile */}
+                            <li>
+                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Lessons">
+                                    <Link to='/dashboard/my-profile'><CgProfile /></Link>
+                                    <NavLink to='/dashboard/my-profile'><span className="is-drawer-close:hidden">My Profile</span></NavLink>
                                 </button>
                             </li>
 

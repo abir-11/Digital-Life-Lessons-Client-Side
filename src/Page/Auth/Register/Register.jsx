@@ -131,7 +131,7 @@ const Register = () => {
             <div className='relative mb-5'>
               <input type="file"
                 {
-                ...register('photo', { required: 'Photo file is required' })
+                ...register('photoURL', { required: 'Photo file is required' })
                 }
                 placeholder='Enter Your file'
                 className="file-input input  input-bordered w-full pl-12 bg-gray-100"

@@ -23,6 +23,7 @@ const PublicLessons = () => {
       return res.data;
     },
   });
+  
   const { data: users } = useQuery({
     queryKey: ["users", user?.email],
     queryFn: async () => {
@@ -39,7 +40,7 @@ const PublicLessons = () => {
 
     );
   }
-  //console.log(userPost);
+  console.log(userPost);
   //console.log(users.isPremium);
 
 
