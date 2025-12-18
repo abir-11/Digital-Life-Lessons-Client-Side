@@ -18,7 +18,7 @@ const AdminProfile = () => {
             const res = await axiosSecure.get(`/users/${user?.email}`);
             return res.data;
         },
-        enabled: !!user?.email, // only fetch if email exists
+        enabled: !!user?.email, 
     });
 
     if (isLoading) {

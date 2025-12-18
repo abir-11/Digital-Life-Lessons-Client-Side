@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"; 
+import React, { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
@@ -8,41 +8,41 @@ import { FaStar } from "react-icons/fa";
 const ManageLessons = () => {
     const axiosSecure = useAxiosSecure();
 
-    const { data: lessons = [], isLoading, refetch } = useQuery({
+    // Fetch lessons
+    const { data: lessonsData = {}, isLoading, refetch } = useQuery({
         queryKey: ["all-lessons"],
         queryFn: async () => {
             const res = await axiosSecure.get("/life_lessons");
-            return res.data;
+            return res.data; // expected: { lessons: [...], total: ... }
         }
     });
 
-    
+    // Ensure lessons is always an array
+    const lessons = Array.isArray(lessonsData.lessons) ? lessonsData.lessons : [];
 
-
-    //  Filter states
+    // Filter states
     const [categoryFilter, setCategoryFilter] = useState("all");
     const [visibilityFilter, setVisibilityFilter] = useState("all");
     const [reportedFilter, setReportedFilter] = useState("all");
 
-    //  Stats
+    // Stats
     const stats = useMemo(() => ({
         publicLessons: lessons.filter(l => l.privacy === "public").length,
         privateLessons: lessons.filter(l => l.privacy === "private").length,
-        reportedLessons: lessons.filter(l => l.reported===true).length
+        reportedLessons: lessons.filter(l => l.reported === true).length
     }), [lessons]);
 
-    //  Filtered lessons
+    // Filtered lessons
     const filteredLessons = useMemo(() => {
         return lessons.filter(l => {
-            let passCategory = categoryFilter === "all" || l.category === categoryFilter;
-            let passVisibility = visibilityFilter === "all" || l.privacy === visibilityFilter;
-            let passReported = reportedFilter === "all" || l.reported===true;
-               
-                
+            const passCategory = categoryFilter === "all" || l.category === categoryFilter;
+            const passVisibility = visibilityFilter === "all" || l.privacy === visibilityFilter;
+            const passReported = reportedFilter === "all" || (reportedFilter === "reported" && l.reported === true);
             return passCategory && passVisibility && passReported;
         });
     }, [lessons, categoryFilter, visibilityFilter, reportedFilter]);
 
+    // Handlers
     const handleDelete = (lesson) => {
         Swal.fire({
             title: "Are you sure?",
@@ -80,7 +80,7 @@ const ManageLessons = () => {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 max-w-11/12 mx-auto">
 
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -103,10 +103,9 @@ const ManageLessons = () => {
                 <select
                     value={categoryFilter}
                     onChange={(e) => setCategoryFilter(e.target.value)}
-                    className="select  bg-primary/60 select-bordered"
+                    className="select bg-primary/60 select-bordered"
                 >
                     <option className="text-white bg-primary" value="all">All Categories</option>
-                    {/* Dynamically list categories */}
                     {[...new Set(lessons.map(l => l.category))].map(cat => (
                         <option className="text-white bg-primary mt-2" key={cat} value={cat}>{cat}</option>
                     ))}
@@ -115,7 +114,7 @@ const ManageLessons = () => {
                 <select
                     value={visibilityFilter}
                     onChange={(e) => setVisibilityFilter(e.target.value)}
-                    className="select select-bordered  bg-primary/60"
+                    className="select select-bordered bg-primary/60"
                 >
                     <option className="text-white bg-primary" value="all">All Visibility</option>
                     <option className="text-white bg-primary my-2" value="public">Public</option>
@@ -125,7 +124,7 @@ const ManageLessons = () => {
                 <select
                     value={reportedFilter}
                     onChange={(e) => setReportedFilter(e.target.value)}
-                    className="select select-bordered  bg-primary/60"
+                    className="select select-bordered bg-primary/60"
                 >
                     <option className="text-white bg-primary" value="all">All Lessons</option>
                     <option className="text-white bg-primary mt-2" value="reported">Reported</option>
@@ -163,11 +162,11 @@ const ManageLessons = () => {
                                         <div className="flex gap-2 justify-center">
                                             {!lesson.reviewed && (
                                                 <button onClick={() => handleReviewed(lesson)} className="btn btn-sm bg-green-100 text-green-600">
-                                                    <MdVerified />
+                                                    <span>reviewed</span> <MdVerified />
                                                 </button>
                                             )}
                                             <button onClick={() => handleFeatured(lesson)} className={`btn btn-sm ${lesson.featured ? "bg-yellow-200 text-yellow-700" : "bg-gray-100 text-gray-600"}`}>
-                                                <FaStar />
+                                                <span>featured </span> <FaStar />
                                             </button>
                                             <button onClick={() => handleDelete(lesson)} className="btn btn-sm bg-red-100 text-red-600">
                                                 <MdDeleteForever />

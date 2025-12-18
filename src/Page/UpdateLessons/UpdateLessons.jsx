@@ -17,7 +17,7 @@ const UpdateLessons = () => {
     };
 
     return (
-        <div>
+        <div className='min-h-screen'>
             <div className='max-w-11/12 mx-auto  '>
                 <div className="overflow-x-auto my-10">
                     <table className="min-w-full border border-gray-200 rounded-lg">

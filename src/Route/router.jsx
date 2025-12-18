@@ -25,6 +25,7 @@ import Admin from '../Page/AdminDashboard/Admin';
 import ReportedLessons from '../Page/AdminDashboard/ReportedLessons';
 import AdminProfile from '../Page/AdminDashboard/AdminProfile/AdminProfile';
 import ProfileEdits from '../Page/AdminDashboard/AdminProfile/ProfileEdits';
+import PrivetRoute from './PrivateRoute';
 
 const router = createBrowserRouter([
     {
@@ -41,23 +42,33 @@ const router = createBrowserRouter([
             },
             {
                 path: '/details-lesson/:id',
-                Component: DetailsPage
+                element:<PrivetRoute>
+                    <DetailsPage></DetailsPage>
+                </PrivetRoute>
             },
             {
                 path: '/author/:email',
-                Component: Author
+                element:<PrivetRoute>
+                    <Author></Author>
+                </PrivetRoute>
             },
             {
                 path: '/pricing',
-                Component: UpdateLessons
+                element:<PrivetRoute>
+                    <UpdateLessons></UpdateLessons>
+                </PrivetRoute>
             },
             {
                 path: '/payment-success',
-                Component: PaymentSuccess
+                element:<PrivetRoute>
+                    <PaymentSuccess></PaymentSuccess>
+                </PrivetRoute>
             },
             {
                 path: '/payment-cancel',
-                Component: PaymentCencelled
+               element:<PrivetRoute>
+                <PaymentCencelled></PaymentCencelled>
+               </PrivetRoute>
             }
 
         ]
@@ -78,16 +89,20 @@ const router = createBrowserRouter([
     },
     {
         path: 'dashboard',
-        Component: Dashboard,
+        element:<PrivetRoute>
+            <Dashboard></Dashboard>
+        </PrivetRoute>,
         children: [
+             {
+                path: 'dashboard-Home',
+                Component: DashboardHome
+            },
+
             {
                 path: 'add-lessons',
                 Component: AddLessons
             },
-            {
-                path: 'dashboard-Home',
-                Component: DashboardHome
-            },
+           
             {
                 path: 'my-lessons',
                 Component: MyLessons

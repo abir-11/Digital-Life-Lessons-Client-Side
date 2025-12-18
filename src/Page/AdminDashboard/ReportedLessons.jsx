@@ -9,22 +9,27 @@ const ReportedLessons = () => {
   const [selectedLesson, setSelectedLesson] = useState(null);
 
   // Fetch all lessons
-  const { data: allLessons = [], isLoading, refetch } = useQuery({
+  const { data: lessonsData = {}, isLoading, refetch } = useQuery({
     queryKey: ["allLessons"],
     queryFn: async () => {
       const res = await axiosSecure.get("/life_lessons");
-      return res.data;
+      return res.data; // expected: { lessons: [...], total: ... }
     },
   });
 
+  // Make sure allLessons is always an array
+  const allLessons = Array.isArray(lessonsData.lessons) ? lessonsData.lessons : [];
+
   // Fetch all reports
-  const { data: reportLessons = [] } = useQuery({
+  const { data: reportLessonsData = [] } = useQuery({
     queryKey: ["reportLessons"],
     queryFn: async () => {
       const res = await axiosSecure.get("/report_lessons");
       return res.data;
     },
   });
+
+  const reportLessons = Array.isArray(reportLessonsData) ? reportLessonsData : [];
 
   // Filter only reported lessons
   const reportedLessons = useMemo(() => {
@@ -108,7 +113,9 @@ const ReportedLessons = () => {
       {selectedLesson && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
           <div className="bg-white p-5 rounded-xl w-96 ">
-            <h3 className="text-xl font-semibold mb-3 text-yellow-500">Reports for: {selectedLesson.title}</h3>
+            <h3 className="text-xl font-semibold mb-3 text-yellow-500">
+              Reports for: {selectedLesson.title}
+            </h3>
             <ul className="space-y-2 max-h-60 overflow-y-auto">
               {reportLessons
                 .filter(r => r.lessonId === selectedLesson._id)

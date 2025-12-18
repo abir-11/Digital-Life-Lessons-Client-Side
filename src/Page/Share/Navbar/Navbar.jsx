@@ -6,19 +6,19 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 const Navbar = () => {
     const { user, logOut, loading } = useAuth();
-    const axiosSecure=useAxiosSecure();
-    const navigate=useNavigate();
+    const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
     //console.log(user);
     const handleLogOut = () => {
         logOut()
             .then(res => {
-             navigate('/login')
+                navigate('/login')
             })
             .catch(error => {
                 console.log(error);
             })
     }
-     const { data: userData = {} } = useQuery({
+    const { data: userData = {} } = useQuery({
         queryKey: ["user", user?.email],
         enabled: !!user?.email,
         queryFn: async () => {
@@ -41,7 +41,7 @@ const Navbar = () => {
                 </NavLink>
             </li>
 
-             <li>
+            <li>
                 <NavLink
                     to="/public-lessons"
                     className={({ isActive }) =>
@@ -52,45 +52,45 @@ const Navbar = () => {
                     Public Lessons
                 </NavLink>
             </li>
-           {
-            user && <>
-            
-             <li>
-                <NavLink
-                    to="dashboard/add-lessons"
-                    className={({ isActive }) =>
-                        `font-base px-3 py-1 rounded-xl hover:underline ${isActive ? 'bg-[#cca3b3] text-white' : 'text-[#003028]'
-                        }`
-                    }
-                >
-                    Add Lesson
-                </NavLink>
-            </li>
-            <li>
-                <NavLink
-                    to="dashboard/my-lessons"
-                    className={({ isActive }) =>
-                        `font-base px-3 py-1 rounded-xl hover:underline ${isActive ? 'bg-[#cca3b3] text-white' : 'text-[#003028]'
-                        }`
-                    }
-                >
-                    My Lessons
-                </NavLink>
-            </li>
-           
-            <li>
-                <NavLink
-                    to="/pricing"
-                    className={({ isActive }) =>
-                        `font-base px-3 py-1 rounded-xl hover:underline ${isActive ? 'bg-[#cca3b3] text-white' : 'text-[#003028]'
-                        }`
-                    }
-                >
-                Pricing/Update
-                </NavLink>
-            </li>
-            </>
-           }
+            {
+                user && <>
+
+                    <li>
+                        <NavLink
+                            to="dashboard/add-lessons"
+                            className={({ isActive }) =>
+                                `font-base px-3 py-1 rounded-xl hover:underline ${isActive ? 'bg-[#cca3b3] text-white' : 'text-[#003028]'
+                                }`
+                            }
+                        >
+                            Add Lesson
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="dashboard/my-lessons"
+                            className={({ isActive }) =>
+                                `font-base px-3 py-1 rounded-xl hover:underline ${isActive ? 'bg-[#cca3b3] text-white' : 'text-[#003028]'
+                                }`
+                            }
+                        >
+                            My Lessons
+                        </NavLink>
+                    </li>
+
+                    <li>
+                        <NavLink
+                            to="/pricing"
+                            className={({ isActive }) =>
+                                `font-base px-3 py-1 rounded-xl hover:underline ${isActive ? 'bg-[#cca3b3] text-white' : 'text-[#003028]'
+                                }`
+                            }
+                        >
+                            Pricing/Update
+                        </NavLink>
+                    </li>
+                </>
+            }
         </>
     );
 
@@ -101,7 +101,7 @@ const Navbar = () => {
             </p>
         );
     }
-//console.log(userData);
+    //console.log(userData);
     return (
         <div className="navbar bg-base-100 shadow-sm">
             <div className="navbar-start">
@@ -115,9 +115,9 @@ const Navbar = () => {
                         </svg>
                     </label>
                     <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 w-52 p-2 shadow bg-white rounded-xl">
-                     
-                         {links}
-                       
+
+                        {links}
+
                     </ul>
                 </div>
 
@@ -166,15 +166,19 @@ const Navbar = () => {
                                 </li>
 
 
-                                <li className="font-base px-3 py-1 rounded-xl   hover:bg-primary hover:text-white text-xl">
-                                    <Link to="/dashboard">Dashboard</Link>
+                                <li className="font-base px-3 py-1 rounded-xl hover:bg-primary hover:text-white text-xl">
+                                    {user?.role === "admin" ? (
+                                        <Link to="/dashboard/admin">Admin Dashboard</Link>
+                                    ) : (
+                                        <Link to="/dashboard/dashboard-Home">Dashboard</Link>
+                                    )}
                                 </li>
 
 
                                 <li className="font-base px-3 py-1 rounded-xl   hover:bg-primary hover:text-white text-xl">
                                     <button onClick={handleLogOut}>
                                         Logout
-                                        
+
                                     </button>
                                 </li>
                             </ul>

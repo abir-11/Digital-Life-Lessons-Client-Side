@@ -5,7 +5,8 @@ import { useQuery } from '@tanstack/react-query';
 const AdminHomePage = () => {
     const axiosSecure = useAxiosSecure();
 
-    const { data: users = [] ,isLoading} = useQuery({
+    // Fetch Users
+    const { data: users = [], isLoading: usersLoading } = useQuery({
         queryKey: ["Users"],
         queryFn: async () => {
             const res = await axiosSecure.get("/users");
@@ -13,14 +14,19 @@ const AdminHomePage = () => {
         },
     });
 
-    const { data: lessons = [] } = useQuery({
+    // Fetch Lessons
+    const { data: lessonsData = {} } = useQuery({
         queryKey: ["life-lessons"],
         queryFn: async () => {
             const res = await axiosSecure.get("/life_lessons");
-            return res.data;
+            return res.data; // { lessons: [...], total: number }
         },
     });
 
+    // Extract lessons array safely
+    const lessons = Array.isArray(lessonsData.lessons) ? lessonsData.lessons : [];
+
+    // Fetch Reported Lessons
     const { data: reportLessons = [] } = useQuery({
         queryKey: ["report_lessons"],
         queryFn: async () => {
@@ -35,9 +41,12 @@ const AdminHomePage = () => {
     const totalLessons = lessons.length;
     const totalReported = reportLessons.length;
 
-    const todaysLessons = lessons.filter(lesson =>
-        lesson.createdAt?.startsWith(today)
-    ).length;
+    const todaysLessons = lessons.filter(lesson => {
+        if (!lesson.createAt) return false;
+        const lessonDate = new Date(lesson.createAt);
+        const lessonDay = lessonDate.toISOString().split('T')[0]; 
+        return lessonDay === today;
+    }).length;
 
     // Most Active Contributors (top 3 users by number of lessons)
     const activeContributors = useMemo(() => {
@@ -53,21 +62,20 @@ const AdminHomePage = () => {
             .map(([email, count]) => ({ email, count }));
     }, [lessons]);
 
-    if (isLoading) {
+    if (usersLoading) {
         return (
             <p className="text-primary flex justify-center items-center mt-5">
                 Loading...
             </p>
-
         );
     }
+   console.log(lessons)
     return (
-        <div className="p-6 space-y-6">
+        <div className="max-w-11/12 mx-auto space-y-6">
 
             <h2 className="text-2xl font-bold">Admin Dashboard Overview</h2>
 
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
                 <div className="bg-white shadow rounded-xl p-5">
                     <h4 className="text-gray-500">Total Users</h4>
                     <p className="text-3xl font-bold text-primary">{totalUsers}</p>
@@ -102,8 +110,6 @@ const AdminHomePage = () => {
                     </ul>
                 )}
             </div>
-
-
 
         </div>
     );
