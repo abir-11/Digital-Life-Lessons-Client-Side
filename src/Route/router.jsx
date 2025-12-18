@@ -18,6 +18,8 @@ import ProfileEdit from '../Page/MyProfile/ProfileEdit';
 import PaymentSuccess from '../Page/UpdateLessons/PaymentSuccess';
 import PaymentCencelled from '../Page/UpdateLessons/PaymentCencelled';
 import DashboardHome from '../Page/DashboardHome/DashboardHome';
+import AdminHomePage from '../Page/AdminDashboard/AdminHomePage';
+import ManageUsers from '../Page/AdminDashboard/ManageUsers';
 
 const router = createBrowserRouter([
     {
@@ -96,6 +98,14 @@ const router = createBrowserRouter([
             {
                 path:'profile-edit',
                 Component:ProfileEdit
+            },
+            {
+                path:'admin-dashboard',
+                Component:AdminHomePage
+            },
+            {
+                path:'admin-manage-users',
+                Component:ManageUsers
             }
         ]
     }
