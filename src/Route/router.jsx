@@ -15,6 +15,9 @@ import UpdateLessons from '../Page/UpdateLessons/UpdateLessons';
 import MyFavorites from '../Page/MyFavorites/MyFavorites';
 import MyProfile from '../Page/MyProfile/MyProfile';
 import ProfileEdit from '../Page/MyProfile/ProfileEdit';
+import PaymentSuccess from '../Page/UpdateLessons/PaymentSuccess';
+import PaymentCencelled from '../Page/UpdateLessons/PaymentCencelled';
+import DashboardHome from '../Page/DashboardHome/DashboardHome';
 
 const router = createBrowserRouter([
     {
@@ -40,6 +43,14 @@ const router = createBrowserRouter([
             {
                 path:'/pricing',
                 Component:UpdateLessons
+            },
+            {
+                path:'/payment-success',
+                Component:PaymentSuccess
+            },
+            {
+                path:'/payment-cancel',
+                Component:PaymentCencelled
             }
 
         ]
@@ -65,6 +76,10 @@ const router = createBrowserRouter([
             {
                 path: 'add-lessons',
                 Component: AddLessons
+            },
+            {
+                path: 'dashboard-Home',
+                Component:DashboardHome
             },
             {
                 path: 'my-lessons',

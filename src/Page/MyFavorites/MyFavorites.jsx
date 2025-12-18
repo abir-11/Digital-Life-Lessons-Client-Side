@@ -194,18 +194,18 @@ const MyFavorites = () => {
                                                         {lesson.title}
                                                     </h3>
                                                     <p className="text-sm text-gray-500 line-clamp-2">
-                                                        {lesson.description}
+                                                        {lesson?.description}
                                                     </p>
                                                     <div className="flex items-center mt-1">
-                                                        {lesson.photoURL && (
+                                                        {lesson?.photoURL && (
                                                             <img
-                                                                src={lesson.photoURL}
+                                                                src={lesson?.photoURL}
                                                                 alt={lesson.name}
                                                                 className="h-5 w-5 rounded-full mr-2"
                                                             />
                                                         )}
                                                         <span className="text-xs text-gray-400">
-                                                            By {lesson.name}
+                                                            By {lesson?.name}
                                                         </span>
                                                     </div>
                                                 </div>

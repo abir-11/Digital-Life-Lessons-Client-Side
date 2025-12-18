@@ -23,7 +23,7 @@ const MyProfile = () => {
 
   
 
-    const { data: userData = {}, isLoading, refetch } = useQuery({
+    const { data: userData = {}, isLoading } = useQuery({
         queryKey: ["user", user?.email],
         enabled: !!user?.email,
         queryFn: async () => {
