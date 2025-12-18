@@ -9,7 +9,7 @@ const ReportLessonModal = ({ lesson, isOpen, onClose, refetch }) => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const [isSubmitting, setIsSubmitting] = useState(false);
-
+     
     const {
         register,
         handleSubmit,
@@ -18,6 +18,7 @@ const ReportLessonModal = ({ lesson, isOpen, onClose, refetch }) => {
     } = useForm();
 
     const onSubmit = async (data) => {
+
         if (!user?.email) {
             Swal.fire({
                 icon: 'warning',
@@ -48,20 +49,22 @@ const ReportLessonModal = ({ lesson, isOpen, onClose, refetch }) => {
                         throw new Error('User data not found');
                     }
 
-                    // Prepare report data
                     const reportData = {
                         lessonId: lesson._id,
-                        reporterUserId: currentUser._id, 
+                        reporterUserId: currentUser._id,
                         reportedUserEmail: lesson.email,
                         reason: data.reason,
                     };
 
-                    //console.log('Sending report data:', reportData);
 
-                    // Send report
+
                     const result = await axiosSecure.post('/report_lessons', reportData);
 
                     if (result.data.success) {
+                        await axiosSecure.patch(`/life_lessons/${lesson._id}`, {
+                            action: "report"
+                        });
+                        refetch();
                         Swal.fire({
                             icon: 'success',
                             title: 'Report Submitted',

@@ -20,6 +20,8 @@ import PaymentCencelled from '../Page/UpdateLessons/PaymentCencelled';
 import DashboardHome from '../Page/DashboardHome/DashboardHome';
 import AdminHomePage from '../Page/AdminDashboard/AdminHomePage';
 import ManageUsers from '../Page/AdminDashboard/ManageUsers';
+import ManageLessons from '../Page/AdminDashboard/ManageLessons';
+import Admin from '../Page/AdminDashboard/Admin';
 
 const router = createBrowserRouter([
     {
@@ -35,24 +37,24 @@ const router = createBrowserRouter([
                 Component: PublicLessons
             },
             {
-                path:'/details-lesson/:id',
-                Component:DetailsPage
+                path: '/details-lesson/:id',
+                Component: DetailsPage
             },
             {
-                path:'/author/:email',
-                Component:Author
+                path: '/author/:email',
+                Component: Author
             },
             {
-                path:'/pricing',
-                Component:UpdateLessons
+                path: '/pricing',
+                Component: UpdateLessons
             },
             {
-                path:'/payment-success',
-                Component:PaymentSuccess
+                path: '/payment-success',
+                Component: PaymentSuccess
             },
             {
-                path:'/payment-cancel',
-                Component:PaymentCencelled
+                path: '/payment-cancel',
+                Component: PaymentCencelled
             }
 
         ]
@@ -81,32 +83,44 @@ const router = createBrowserRouter([
             },
             {
                 path: 'dashboard-Home',
-                Component:DashboardHome
+                Component: DashboardHome
             },
             {
                 path: 'my-lessons',
                 Component: MyLessons
             },
             {
-                path:'my-favorites',
-                Component:MyFavorites
+                path: 'my-favorites',
+                Component: MyFavorites
             },
             {
-                path:'my-profile',
-                Component:MyProfile,
+                path: 'my-profile',
+                Component: MyProfile,
             },
             {
-                path:'profile-edit',
-                Component:ProfileEdit
+                path: 'profile-edit',
+                Component: ProfileEdit
             },
             {
-                path:'admin-dashboard',
-                Component:AdminHomePage
+                path: 'admin',
+                Component: Admin,
+                children: [
+                   {
+                    index:true,
+                    Component:AdminHomePage
+
+                   },
+                    {
+                        path: 'manage-users',
+                        Component: ManageUsers
+                    },
+                    {
+                        path:'manage-lesson',
+                        Component:ManageLessons
+                    }
+                ]
             },
-            {
-                path:'admin-manage-users',
-                Component:ManageUsers
-            }
+
         ]
     }
 ])
