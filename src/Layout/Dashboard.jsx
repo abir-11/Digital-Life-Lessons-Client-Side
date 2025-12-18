@@ -113,6 +113,13 @@ const Dashboard = () => {
                                     <NavLink to='/dashboard/admin/reported-lessons'><span className="is-drawer-close:hidden">Reported Lesson</span></NavLink>
                                 </button>
                             </li>
+                             {/*admin profile */}
+                            <li>
+                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Lessons">
+                                    <Link to='/dashboard/admin/profile'><CgProfile /></Link>
+                                    <NavLink to='/dashboard/admin/profile'><span className="is-drawer-close:hidden">Admin Profile</span></NavLink>
+                                </button>
+                            </li>
                             {/* List item */}
                             <li>
                                 <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Settings">

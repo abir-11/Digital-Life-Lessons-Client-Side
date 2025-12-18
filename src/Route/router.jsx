@@ -23,6 +23,8 @@ import ManageUsers from '../Page/AdminDashboard/ManageUsers';
 import ManageLessons from '../Page/AdminDashboard/ManageLessons';
 import Admin from '../Page/AdminDashboard/Admin';
 import ReportedLessons from '../Page/AdminDashboard/ReportedLessons';
+import AdminProfile from '../Page/AdminDashboard/AdminProfile/AdminProfile';
+import ProfileEdits from '../Page/AdminDashboard/AdminProfile/ProfileEdits';
 
 const router = createBrowserRouter([
     {
@@ -122,6 +124,14 @@ const router = createBrowserRouter([
                     {
                         path:'reported-lessons',
                         Component:ReportedLessons
+                    },
+                    {
+                        path:'profile',
+                        Component:AdminProfile
+                    },
+                    {
+                        path:'profile-edit',
+                        Component:ProfileEdits
                     }
                 ]
             },
