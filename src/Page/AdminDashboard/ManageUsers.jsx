@@ -82,7 +82,7 @@ const ManageUsers = () => {
 
         );
     }
-    console.log(users);
+    //console.log(users);
 
     return (
         <div className="p-6">

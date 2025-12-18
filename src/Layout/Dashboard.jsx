@@ -3,7 +3,7 @@ import { BiSolidMessageSquareAdd } from 'react-icons/bi';
 import { FaUserTag } from 'react-icons/fa';
 import { Link, Outlet } from 'react-router';
 import { NavLink } from 'react-router';
-import { MdFavorite, MdManageAccounts } from "react-icons/md";
+import { MdFavorite, MdManageAccounts, MdReport } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 
 const Dashboard = () => {
@@ -104,6 +104,13 @@ const Dashboard = () => {
                                 <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Lessons">
                                     <Link to='/dashboard/admin/manage-lesson'><FaUserTag /></Link>
                                     <NavLink to='/dashboard/admin/manage-lesson'><span className="is-drawer-close:hidden">Manage Lesson</span></NavLink>
+                                </button>
+                            </li>
+                            {/* reported lessons */}
+                             <li>
+                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Lessons">
+                                    <Link to='/dashboard/admin/reported-lessons'><MdReport /></Link>
+                                    <NavLink to='/dashboard/admin/reported-lessons'><span className="is-drawer-close:hidden">Reported Lesson</span></NavLink>
                                 </button>
                             </li>
                             {/* List item */}
