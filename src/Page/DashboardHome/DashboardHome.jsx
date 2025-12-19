@@ -4,7 +4,19 @@ import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import useAuth from '../../Hooks/useAuth';
 import { Link, useNavigate } from 'react-router';
 import { FcViewDetails } from 'react-icons/fc';
-
+import { 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  Legend, 
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+ 
+} from 'recharts';
 
 const DashboardHome = () => {
     const { user } = useAuth();
@@ -37,7 +49,71 @@ const DashboardHome = () => {
             return res.data;
         }
     });
+
+    // Generate weekly contribution data
+    const weeklyContributions = useMemo(() => {
+        const weeks = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+        const lessonsPerWeek = [0, 0, 0, 0];
+        const favoritesPerWeek = [0, 0, 0, 0];
+        
+        userLessons.forEach(lesson => {
+            const createdDate = new Date(lesson.createAt);
+            const weekOfMonth = Math.floor((createdDate.getDate() - 1) / 7);
+            if (weekOfMonth >= 0 && weekOfMonth < 4) {
+                lessonsPerWeek[weekOfMonth]++;
+            }
+        });
+
+        favorites.forEach(favorite => {
+            const createdDate = new Date(favorite.createAt);
+            const weekOfMonth = Math.floor((createdDate.getDate() - 1) / 7);
+            if (weekOfMonth >= 0 && weekOfMonth < 4) {
+                favoritesPerWeek[weekOfMonth]++;
+            }
+        });
+
+        return weeks.map((week, index) => ({
+            name: week,
+            lessons: lessonsPerWeek[index],
+            favorites: favoritesPerWeek[index],
+            total: lessonsPerWeek[index] + favoritesPerWeek[index]
+        }));
+    }, [userLessons, favorites]);
+
+    // Generate monthly contribution data
+    const monthlyContributions = useMemo(() => {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const currentYear = new Date().getFullYear();
+        const lessonsPerMonth = new Array(12).fill(0);
+        const favoritesPerMonth = new Array(12).fill(0);
+
+        userLessons.forEach(lesson => {
+            const createdDate = new Date(lesson.createAt);
+            if (createdDate.getFullYear() === currentYear) {
+                const month = createdDate.getMonth();
+                lessonsPerMonth[month]++;
+            }
+        });
+
+        favorites.forEach(favorite => {
+            const createdDate = new Date(favorite.createAt);
+            if (createdDate.getFullYear() === currentYear) {
+                const month = createdDate.getMonth();
+                favoritesPerMonth[month]++;
+            }
+        });
+
+        return months.map((month, index) => ({
+            name: month,
+            lessons: lessonsPerMonth[index],
+            favorites: favoritesPerMonth[index],
+            total: lessonsPerMonth[index] + favoritesPerMonth[index]
+        }));
+    }, [userLessons, favorites]);
+
+  
     
+
     const totalFavorites = useMemo(() => {
         return userLessons.reduce((total, lesson) => {
             if (lesson.favoriteUsers && Array.isArray(lesson.favoriteUsers)) {
@@ -49,22 +125,19 @@ const DashboardHome = () => {
         }, 0);
     }, [userLessons]);
 
-
-
     const recentLessons = [...userLessons]
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .sort((a, b) => new Date(b.createAt) - new Date(a.createAt))
         .slice(0, 2);
+
+    
 
     if (isLoading) {
         return (
             <p className="text-primary flex justify-center items-center mt-5">
                 Loading...
             </p>
-
         );
     }
-
-
 
     return (
         <div className="p-6 space-y-6">
@@ -82,13 +155,14 @@ const DashboardHome = () => {
                     </p>
                 </div>
 
-
                 <div className="bg-white shadow rounded-xl p-5">
                     <h4 className="text-gray-500">Total Favorites</h4>
                     <p className="text-3xl font-bold text-yellow-500">
                         {totalFavorites}
                     </p>
                 </div>
+
+               
             </div>
 
             {/* Quick Actions */}
@@ -107,6 +181,59 @@ const DashboardHome = () => {
                 </div>
             </div>
 
+            {/* Analytics Charts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Weekly Contributions */}
+                <div className="bg-white shadow rounded-xl p-5">
+                    <h3 className="font-semibold mb-4">Weekly Contributions</h3>
+                    <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={weeklyContributions}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="lessons" fill="#8884d8" name="Lessons Added" />
+                                <Bar dataKey="favorites" fill="#82ca9d" name="Favorites Added" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+                {/* Monthly Trend */}
+                <div className="bg-white shadow rounded-xl p-5">
+                    <h3 className="font-semibold mb-4">Monthly Trend ({new Date().getFullYear()})</h3>
+                    <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={monthlyContributions}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Line 
+                                    type="monotone" 
+                                    dataKey="lessons" 
+                                    stroke="#8884d8" 
+                                    strokeWidth={2}
+                                    name="Lessons"
+                                />
+                                <Line 
+                                    type="monotone" 
+                                    dataKey="favorites" 
+                                    stroke="#82ca9d" 
+                                    strokeWidth={2}
+                                    name="Favorites"
+                                />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+             
+            </div>
+
             {/* Recent Lessons */}
             <div className="bg-white shadow rounded-xl p-5">
                 <h3 className="font-semibold mb-4">Recently Added Lessons</h3>
@@ -115,7 +242,6 @@ const DashboardHome = () => {
                 ) : (
                     <ul className="space-y-3">
                         {recentLessons.map(lesson => {
-
                             const lessonLikes = lesson.likeUsers?.length || lesson.likes || 0;
                             const lessonComments = lesson.comments?.length || 0;
                             const lessonFavorites = lesson.favoriteUsers?.length || lesson.favorites || 0;
@@ -129,7 +255,8 @@ const DashboardHome = () => {
                                         <div className="flex-1">
                                             <h4 className="font-semibold text-lg">{lesson.title}</h4>
                                             <p className="text-sm text-gray-600 mb-2">
-                                                {lesson.category} • {lesson.emotionalTone}
+                                                {lesson.category} • {lesson.emotionalTone} • 
+                                                {new Date(lesson.createAt).toLocaleDateString()}
                                             </p>
                                             <div className="flex gap-4 text-sm">
                                                 <span className="flex items-center gap-1">
@@ -158,9 +285,6 @@ const DashboardHome = () => {
                     </ul>
                 )}
             </div>
-
-            {/* Analytics Chart */}
-
         </div>
     );
 };
