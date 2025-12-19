@@ -65,8 +65,8 @@ const ReportedLessons = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-semibold">Reported Lessons</h2>
+    <div className="space-y-6 max-w-11/12 mx-auto my-10">
+      <h2 className="text-3xl sm:text-4xl text-red-500  font-bold">Reported Lessons</h2>
 
       <div className="overflow-x-auto bg-white shadow rounded-xl p-5">
         <table className="table table-zebra w-full">

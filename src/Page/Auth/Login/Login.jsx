@@ -133,7 +133,7 @@ const Login = () => {
 
           </form>
           <div>
-            <div className='text-center  font-medium  text-xl text-base-200'>
+            <div className='text-center  font-medium  text-xl text-primary'>
               or
             </div>
             <div>

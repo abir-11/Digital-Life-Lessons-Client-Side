@@ -41,7 +41,7 @@ const Dashboard = () => {
                         <div className="px-4">Navbar Title</div>
                     </nav>
                     {/* Page content here */}
-                    <div className='max-w-11/12 mx-auto '>
+                    <div className=' '>
 
                         <Outlet></Outlet>
                     </div>
@@ -121,8 +121,10 @@ const Dashboard = () => {
                             ) : (
                                 <>
                                     {/* Homepage */}
-                                    <li>
-                                        <NavLink to="/" className="flex gap-2 items-center border-b mt-5">
+                                    <li className='border-b'>
+                                        <NavLink to="/" className={({ isActive }) =>
+                                            `font-base px-3 py-1 rounded-xl hover:underline ${isActive ? 'bg-white text-primary' : 'text-white mb-5'
+                                            }`}>
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth="2" fill="none" stroke="currentColor" className="size-4">
                                                 <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
                                                 <path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />

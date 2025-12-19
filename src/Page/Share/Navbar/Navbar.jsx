@@ -78,17 +78,18 @@ const Navbar = () => {
                         </NavLink>
                     </li>
 
-                    <li>
-                        <NavLink
-                            to="/pricing"
-                            className={({ isActive }) =>
-                                `font-base px-3 py-1 rounded-xl hover:underline ${isActive ? 'bg-[#cca3b3] text-white' : 'text-[#003028]'
-                                }`
-                            }
-                        >
-                            Pricing/Update
-                        </NavLink>
-                    </li>
+                    {
+                        !userData?.isPremium && (
+                            <li>
+                                <NavLink to="/pricing" className={({ isActive }) =>
+                                    `font-base px-3 py-1 rounded-xl hover:underline ${isActive ? 'bg-[#cca3b3] text-white' : 'text-[#003028]'
+                                    }`
+                                }>
+                                    Upgrade to Premium
+                                </NavLink>
+                            </li>
+                        )
+                    }
                 </>
             }
         </>
@@ -138,7 +139,7 @@ const Navbar = () => {
 
                     {!user && (
                         <div className="flex items-center gap-3">
-                            <Link className="btn btn-ghost" to="/login">Login</Link>
+                            <Link className="btn btn-ghost border border-primary hover:bg-primary hover:text-white" to="/login">Login</Link>
                             <Link className="btn btn-primary" to="/register">Sign Up</Link>
                         </div>
                     )}

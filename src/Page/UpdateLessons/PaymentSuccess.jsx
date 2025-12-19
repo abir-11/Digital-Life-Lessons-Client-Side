@@ -28,7 +28,7 @@ const PaymentSuccess = () => {
                 </h1>
                 <p className='my-2'>You are now a Premium User</p>
                 <div>
-                    <Link to='/pricing' className='flex justify-center items-center'><button className=" btn bg-primary flex items-center text-center justify-center my-5 px-5 text-white py-2 rounded-lg hover:bg-primary/80">Back</button>
+                    <Link to='/' className='flex justify-center items-center'><button className=" btn bg-primary flex items-center text-center justify-center my-5 px-5 text-white py-2 rounded-lg hover:bg-primary/80">Back</button>
                     </Link>
                 </div>
             </div>

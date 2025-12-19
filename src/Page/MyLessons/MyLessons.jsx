@@ -82,12 +82,12 @@ const MyLessons = () => {
         });
     }
     if (isLoading) {
-        return <p className='text-primary flex justify-center items-center-safe mt-5'>Loading...</p>
+        return <p className='text-primary flex  justify-center items-center-safe mt-5'>Loading...</p>
     }
 
     return (
-        <div>
-            <div>My all Lessons:{userPost.length}</div>
+        <div className='max-w-11/12 mx-auto shadow-sm p-5 rounded-xl my-10 '>
+            <div className='font-bold text-3xl'>My all Lessons:({userPost.length})</div>
             <div className="overflow-x-auto">
                 <table className="table text-center">
                     <thead>

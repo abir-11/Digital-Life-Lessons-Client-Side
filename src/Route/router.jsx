@@ -43,9 +43,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/details-lesson/:id',
-                element:<PrivetRoute>
-                    <DetailsPage></DetailsPage>
-                </PrivetRoute>
+                Component: DetailsPage
             },
             {
                 path: '/author/:email',

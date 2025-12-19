@@ -82,7 +82,7 @@ const MyFavorites = () => {
     }
 
     return (
-        <div className="max-w-11/12 mx-auto px-10 py-8 bg-primary rounded-lg shadow-md  mb-6">
+        <div className="max-w-11/12 mx-auto px-10 py-8 bg-primary rounded-lg shadow-md  my-6">
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-gray-800 mb-2">My Favorites</h1>
                 <p className="text-gray-600">
