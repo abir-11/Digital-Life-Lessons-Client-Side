@@ -1,6 +1,20 @@
 import React, { useMemo } from 'react';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
+import {
+    LineChart,
+    Line,
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
+    AreaChart,
+    Area
+} from 'recharts';
 
 const AdminHomePage = () => {
     const axiosSecure = useAxiosSecure();
@@ -19,7 +33,7 @@ const AdminHomePage = () => {
         queryKey: ["life-lessons"],
         queryFn: async () => {
             const res = await axiosSecure.get("/life_lessons");
-            return res.data; // { lessons: [...], total: number }
+            return res.data;
         },
     });
 
@@ -44,7 +58,7 @@ const AdminHomePage = () => {
     const todaysLessons = lessons.filter(lesson => {
         if (!lesson.createAt) return false;
         const lessonDate = new Date(lesson.createAt);
-        const lessonDay = lessonDate.toISOString().split('T')[0]; 
+        const lessonDay = lessonDate.toISOString().split('T')[0];
         return lessonDay === today;
     }).length;
 
@@ -62,6 +76,70 @@ const AdminHomePage = () => {
             .map(([email, count]) => ({ email, count }));
     }, [lessons]);
 
+    // Lesson Growth Data (Monthly)
+    const lessonGrowthData = useMemo(() => {
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const currentYear = new Date().getFullYear();
+        const monthCounts = new Array(12).fill(0);
+        const cumulativeCounts = [];
+
+        // Count lessons per month for current year
+        lessons.forEach(lesson => {
+            if (lesson.createAt) {
+                const date = new Date(lesson.createAt);
+                if (date.getFullYear() === currentYear) {
+                    const month = date.getMonth();
+                    monthCounts[month]++;
+                }
+            }
+        });
+
+        // Create cumulative data
+        let total = 0;
+        return monthNames.map((month, index) => {
+            total += monthCounts[index];
+            return {
+                month,
+                count: monthCounts[index],
+                cumulative: total
+            };
+        });
+    }, [lessons]);
+
+    // User Growth Data (Monthly)
+    const userGrowthData = useMemo(() => {
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const currentYear = new Date().getFullYear();
+        const monthCounts = new Array(12).fill(0);
+        const cumulativeCounts = [];
+
+        // Count users per month for current year
+        users.forEach(user => {
+            if (user.createAt) {
+                const date = new Date(user.createAt);
+                if (date.getFullYear() === currentYear) {
+                    const month = date.getMonth();
+                    monthCounts[month]++;
+                }
+            }
+        });
+
+        // Create cumulative data
+        let total = 0;
+        return monthNames.map((month, index) => {
+            total += monthCounts[index];
+            return {
+                month,
+                count: monthCounts[index],
+                cumulative: total
+            };
+        });
+    }, [users]);
+
+
+   
+   
+
     if (usersLoading) {
         return (
             <p className="text-primary flex justify-center items-center mt-5">
@@ -69,13 +147,13 @@ const AdminHomePage = () => {
             </p>
         );
     }
-   console.log(lessons)
-    return (
-        <div className="max-w-11/12 mx-auto space-y-6">
 
+    return (
+        <div className="max-w-11/12 mx-auto space-y-10 mb-10 p-4">
             <h2 className="text-2xl font-bold">Admin Dashboard Overview</h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
                 <div className="bg-white shadow rounded-xl p-5">
                     <h4 className="text-gray-500">Total Users</h4>
                     <p className="text-3xl font-bold text-primary">{totalUsers}</p>
@@ -110,6 +188,85 @@ const AdminHomePage = () => {
                     </ul>
                 )}
             </div>
+
+            {/* Growth Charts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Lesson Growth Chart */}
+                <div className="bg-white shadow rounded-xl p-5">
+                    <h3 className="font-semibold mb-4">Lesson Growth (Monthly)</h3>
+                    <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart
+                                data={lessonGrowthData}
+                                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="month" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Area
+                                    type="monotone"
+                                    dataKey="count"
+                                    stroke="#8884d8"
+                                    fill="#8884d8"
+                                    fillOpacity={0.3}
+                                    name="New Lessons"
+                                />
+                                <Line
+                                    type="monotone"
+                                    dataKey="cumulative"
+                                    stroke="#82ca9d"
+                                    strokeWidth={2}
+                                    name="Total Lessons"
+                                />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+                {/* User Growth Chart */}
+                <div className="bg-white shadow rounded-xl p-5">
+                    <h3 className="font-semibold mb-4">User Growth (Monthly)</h3>
+                    <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart
+                                data={userGrowthData}
+                                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="month" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Area
+                                    type="monotone"
+                                    dataKey="count"
+                                    stroke="#ff7300"
+                                    fill="#ff7300"
+                                    fillOpacity={0.3}
+                                    name="New Users"
+                                />
+                                <Line
+                                    type="monotone"
+                                    dataKey="cumulative"
+                                    stroke="#387908"
+                                    strokeWidth={2}
+                                    name="Total Users"
+                                />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+               
+
+                
+            </div>
+
+
+
+
 
         </div>
     );

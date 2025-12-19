@@ -12,7 +12,7 @@ const Loading = ({ children }) => {
     );
   }
 
-  return children;  // correct way
+  return children;  
 };
 
 export default Loading;

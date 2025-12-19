@@ -167,7 +167,7 @@ const Navbar = () => {
 
 
                                 <li className="font-base px-3 py-1 rounded-xl hover:bg-primary hover:text-white text-xl">
-                                    {user?.role === "admin" ? (
+                                    {userData?.role === "admin" ? (
                                         <Link to="/dashboard/admin">Admin Dashboard</Link>
                                     ) : (
                                         <Link to="/dashboard/dashboard-Home">Dashboard</Link>

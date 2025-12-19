@@ -26,6 +26,7 @@ import ReportedLessons from '../Page/AdminDashboard/ReportedLessons';
 import AdminProfile from '../Page/AdminDashboard/AdminProfile/AdminProfile';
 import ProfileEdits from '../Page/AdminDashboard/AdminProfile/ProfileEdits';
 import PrivetRoute from './PrivateRoute';
+import AdminRouter from './AdminRouter';
 
 const router = createBrowserRouter([
     {
@@ -121,7 +122,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'admin',
-                Component: Admin,
+                element:<AdminRouter><Admin></Admin></AdminRouter>,
                 children: [
                    {
                     index:true,
