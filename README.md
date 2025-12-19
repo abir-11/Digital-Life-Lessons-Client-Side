@@ -1,16 +1,29 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+#About the Project
+*Digital Life Lessons is a user-driven platform where people can share real-life lessons, experiences, and reflections to inspire personal growth, mindset improvement, and self-awareness in the digital age.
 
-Currently, two official plugins are available:
+#Key Features
+ Users can create and publish meaningful life lessons with titles, descriptions, categories, and emotional tones  
+ Favorite system allows users to save lessons they like for quick access later  
+ Comment feature enables interaction and discussion on each lesson  
+  
+Fully responsive and modern UI for mobile, tablet, and desktop devices  
+ Premium features with role-based access (Free vs Premium users)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+#Technologies Used
+- React.js
+- React Router
+- Tailwind CSS
+- Firebase Authentication
+- Axios
+- React Query
 
-## React Compiler
+#Authentication
+Authentication system with protected routes for secure access
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+#Purpose
+This project was built as part of a web development assignment to demonstrate full-stack concepts, user authentication, CRUD operations, and responsive UI design.
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+ **Developed by:** Md Arafat Alam Abir

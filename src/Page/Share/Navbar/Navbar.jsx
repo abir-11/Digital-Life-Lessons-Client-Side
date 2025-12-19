@@ -103,7 +103,7 @@ const Navbar = () => {
     }
     //console.log(userData);
     return (
-        <div className="navbar bg-base-100 shadow-sm">
+        <div className="navbar bg-base-100  shadow-sm">
             <div className="navbar-start">
                 {/* Mobile Dropdown */}
                 <div className="dropdown">
@@ -161,9 +161,17 @@ const Navbar = () => {
 
                                     }
                                 </li>
-                                <li className="font-base px-3 py-1 rounded-xl   hover:bg-primary hover:text-white text-xl">
-                                    <Link to="/profile">Profile</Link>
-                                </li>
+                                {
+                                    userData?.role === 'admin' ? (
+                                        <li className="font-base px-3 py-1 rounded-xl hover:bg-primary hover:text-white text-xl">
+                                            <Link to="/dashboard/admin/profile">Admin Profile</Link>
+                                        </li>
+                                    ) : (
+                                        <li className="font-base px-3 py-1 rounded-xl hover:bg-primary hover:text-white text-xl">
+                                            <Link to="/profile">Profile</Link>
+                                        </li>
+                                    )
+                                }
 
 
                                 <li className="font-base px-3 py-1 rounded-xl hover:bg-primary hover:text-white text-xl">

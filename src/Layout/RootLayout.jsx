@@ -6,7 +6,7 @@ import Footer from '../Page/Footer/Footer';
 const RootLayout = () => {
     return (
         <div>
-           <div>
+           <div className='sticky bg-white top-0 z-50'>
             <Navbar></Navbar>
             </div> 
            <div>
