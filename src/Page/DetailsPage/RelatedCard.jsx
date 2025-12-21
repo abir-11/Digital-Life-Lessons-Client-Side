@@ -40,7 +40,7 @@ const RelatedCard = () => {
     }
 
     return (
-       <div className="my-10">
+       <div className="my-10 ">
     <div className="max-w-11/12 mx-auto  rounded-2xl shadow-2xl bg-white">
         <div className="max-w-11/12 mx-auto py-8">
             <h2 className="text-2xl font-bold mb-6 text-center">

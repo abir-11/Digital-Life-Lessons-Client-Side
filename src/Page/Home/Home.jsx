@@ -20,14 +20,15 @@ import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import CardSection from "./CardSection";
 import { useNavigate } from "react-router";
 import useAuth from "../../Hooks/useAuth";
+import Loading from './../Share/Loading/Loading';
 
 const Home = () => {
-  
+
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
 
   // Featured lessons
-  const { data: featuredLessons = [] } = useQuery({
+  const { data: featuredLessons = [], isLoading: featureLoading } = useQuery({
     queryKey: ["featuredLessons"],
     queryFn: async () => {
       const res = await axiosSecure.get("/life_lessons?featured=true");
@@ -36,7 +37,7 @@ const Home = () => {
   });
 
   // Top contributors
-  const { data: topContributors = [] } = useQuery({
+  const { data: topContributors = [], isLoading: topLoading } = useQuery({
     queryKey: ["topContributors"],
     queryFn: async () => {
       const res = await axiosSecure.get("/top-contributors");
@@ -45,13 +46,21 @@ const Home = () => {
   });
 
   // Most saved lessons
-  const { data: mostSavedLessons = [] } = useQuery({
+  const { data: mostSavedLessons = [], isLoading: mostLoading } = useQuery({
     queryKey: ["mostSavedLessons"],
     queryFn: async () => {
       const res = await axiosSecure.get("/life_lessons?sort=favorites");
       return Array.isArray(res.data.lessons) ? res.data.lessons : [];
     },
   });
+
+  if (featureLoading || topLoading || mostLoading) {
+    return (
+      <p className="text-primary flex justify-center items-center mt-5">
+        Loading...
+      </p>
+    );
+  }
 
   return (
     <div>

@@ -9,7 +9,7 @@ const RootLayout = () => {
            <div className='sticky bg-white top-0 z-50'>
             <Navbar></Navbar>
             </div> 
-           <div>
+           <div className='min-h-screen'>
             <Outlet></Outlet>
            </div>
            <div>
