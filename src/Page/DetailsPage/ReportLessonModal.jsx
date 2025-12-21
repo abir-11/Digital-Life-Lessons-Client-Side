@@ -4,10 +4,12 @@ import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import useAuth from '../../Hooks/useAuth';
 import Swal from 'sweetalert2';
 import { FiAlertTriangle, FiX, FiSend } from 'react-icons/fi';
+import { useNavigate } from 'react-router';
 
 const ReportLessonModal = ({ lesson, isOpen, onClose, refetch }) => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const navigate=useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
      
     const {
@@ -25,6 +27,8 @@ const ReportLessonModal = ({ lesson, isOpen, onClose, refetch }) => {
                 title: 'Login Required',
                 text: 'Please login to report this lesson',
             });
+             navigate('/login');
+           
             return;
         }
 
