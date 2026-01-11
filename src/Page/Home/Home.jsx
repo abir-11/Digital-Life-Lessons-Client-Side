@@ -19,13 +19,19 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import CardSection from "./CardSection";
 import { useNavigate } from "react-router";
-import useAuth from "../../Hooks/useAuth";
 import Loading from './../Share/Loading/Loading';
+import useAuth from "../../Hooks/useAuth";
 
 const Home = () => {
-
+   const {user}=useAuth();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
+//faqs
+  const faqs = [
+    { question: "Is this platform free?", answer: "Yes! You can read and share lessons for free." },
+    { question: "How can I become a contributor?", answer: "Simply sign up and start posting your life lessons." },
+    { question: "Can I save lessons for later?", answer: "Absolutely. Use the bookmark feature to save your favorites." },
+  ];
 
   // Featured lessons
   const { data: featuredLessons = [], isLoading: featureLoading } = useQuery({
@@ -131,7 +137,7 @@ const Home = () => {
         </SwiperSlide>
       </Swiper>
 
-      <div className="max-w-11/12 mx-auto my-10 space-y-16">
+      <div className="max-w-11/12 mx-auto mt-10  ">
         {/* Featured Lessons */}
         <section>
           <h2 className="bg-gradient-to-r from-[#cca3b3] to-[#8a6b7a] bg-clip-text text-center text-2xl sm:text-3xl md:text-4xl mb-6 text-transparent">
@@ -159,7 +165,7 @@ const Home = () => {
         <CardSection />
 
         {/* Top Contributors */}
-        <section className="shadow-xl p-6 rounded-xl">
+        <section className="shadow-xl p-6 mb-10 rounded-xl">
           <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-[#cca3b3] to-[#8a6b7a] text-center bg-clip-text text-transparent">
             🏆 Top Contributors of the Week
           </h2>
@@ -184,7 +190,7 @@ const Home = () => {
         </section>
 
         {/* Most Saved Lessons */}
-        <section>
+        <section className="mb-10">
           <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-[#cca3b3] to-[#8a6b7a] bg-clip-text text-transparent text-center">
             ❤️ Most Saved Lessons
           </h2>
@@ -215,6 +221,47 @@ const Home = () => {
                 ))}
             </div>
           )}
+        </section>
+     {/* --- SECTION 10: FAQ --- */}
+        <section className="mb-10 max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-[#cca3b3] to-[#8a6b7a] bg-clip-text text-transparent text-center">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+                {faqs.map((faq, index) => (
+                    <div key={index} className="collapse collapse-plus bg-base-200">
+                        <input type="radio" name="my-accordion-3" defaultChecked={index === 0} /> 
+                        <div className="collapse-title text-xl font-medium">
+                            {faq.question}
+                        </div>
+                        <div className="collapse-content"> 
+                            <p className="bg-gradient-to-r from-[#cca3b3] to-[#8a6b7a] bg-clip-text text-transparent ">{faq.answer}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </section>
+
+        {/* --- SECTION 11: NEWSLETTER --- */}
+        <section className="py-16 my-10 bg-neutral text-neutral-content rounded-3xl text-center px-6">
+            <div className="max-w-2xl mx-auto">
+                <h2 className="text-3xl font-bold mb-4">Weekly Wisdom to Your Inbox</h2>
+                <p className="mb-8 text-neutral-content/80">Join 8,000+ subscribers getting the best life lessons delivered every Monday.</p>
+                <div className="join w-full max-w-md">
+                    <input className="input input-bordered join-item w-full text-black" placeholder="Enter your email" />
+                    <button className="btn btn-primary join-item">Subscribe</button>
+                </div>
+            </div>
+        </section>
+
+        {/* --- SECTION 12: CALL TO ACTION (CTA) --- */}
+        <section className="py-20 text-center bg-[url('https://images.pexels.com/photos/3747463/pexels-photo-3747463.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')] bg-cover bg-fixed bg-center relative rounded-xl mb-10 overflow-hidden">
+             <div className="absolute inset-0 bg-black/60"></div>
+             <div className="relative z-10 text-white max-w-2xl mx-auto px-4">
+                <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Share Your Story?</h2>
+                <p className="text-xl mb-8 text-gray-200">Your experiences can light the path for others. Join our community today.</p>
+                <button onClick={() => navigate(user ? "/dashboard/add-lessons" : "/login")} className="btn btn-lg btn-primary border-none shadow-lg hover:scale-105 transition-transform">
+                    Get Started for Free
+                </button>
+             </div>
         </section>
       </div>
     </div>

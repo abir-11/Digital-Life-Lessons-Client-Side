@@ -52,6 +52,8 @@ const Navbar = () => {
                     Public Lessons
                 </NavLink>
             </li>
+        
+
             {
                 user && <>
 
@@ -92,6 +94,17 @@ const Navbar = () => {
                     }
                 </>
             }
+                <li>
+                <NavLink
+                    to="/about"
+                    className={({ isActive }) =>
+                        `font-base px-3 py-1 rounded-xl hover:underline ${isActive ? 'bg-[#cca3b3] text-white' : 'text-[#003028]'
+                        }`
+                    }
+                >
+                    About Us
+                </NavLink>
+            </li>
         </>
     );
 

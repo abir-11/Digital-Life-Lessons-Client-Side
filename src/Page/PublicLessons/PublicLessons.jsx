@@ -98,7 +98,7 @@ const PublicLessons = () => {
         </div>
 
         {/* Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2  gap-4 mb-6">
           {/* Category Filter */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Filter by Category</label>
@@ -146,7 +146,7 @@ const PublicLessons = () => {
         )}
 
         {/* Lessons Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 items-stretch">
           {filteredLessons.map((lesson) => {
             const premium = lesson?.accessLevel === "premium";
             const blocked = premium && users?.isPremium !== true;
@@ -154,12 +154,17 @@ const PublicLessons = () => {
             return (
               <div
                 key={lesson._id}
-                className={`relative bg-white shadow-lg p-5 rounded-xl transition ${blocked ? "opacity-60 blur-[1px]" : ""}`}
+                className={`relative bg-white shadow-lg p-5 rounded-xl transition 
+        flex flex-col h-full 
+        ${blocked ? "opacity-60 blur-[1px]" : ""}`}
               >
                 {blocked && (
-                  <div className="absolute inset-0 bg-black/40 backdrop-blur-sm rounded-xl flex flex-col justify-center items-center text-white">
+                  <div className="absolute inset-0 bg-black/40 backdrop-blur-sm rounded-xl 
+          flex flex-col justify-center items-center text-white z-10">
                     <Lock size={32} />
-                    <p className="mt-2 font-medium">Premium Lesson – Upgrade to view</p>
+                    <p className="mt-2 font-medium text-center px-3">
+                      Premium Lesson – Upgrade to view
+                    </p>
                     <button
                       onClick={() => {
                         if (!user?.email) {
@@ -173,42 +178,74 @@ const PublicLessons = () => {
                         }
                         navigate("/pricing");
                       }}
-                      className="w-full bg-primary text-center my-5 px-5 text-white py-2 rounded-lg hover:bg-primary/80"
+                      className="bg-primary my-5 px-5 text-white py-2 rounded-lg hover:bg-primary/80"
                     >
-                      Update Lesson
+                      Upgrade Now
                     </button>
                   </div>
                 )}
 
-                <div className="flex items-center gap-3 mb-3">
-                  <img src={lesson?.photoURL} alt="creator" className="w-10 h-10 rounded-full" />
-                  <p className="font-semibold">{lesson?.name}</p>
+                {/* ===== Card Body ===== */}
+                <div className="flex-1 flex flex-col">
+                  {/* Creator */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <img
+                      src={lesson?.photoURL}
+                      alt="creator"
+                      className="w-10 h-10 rounded-full"
+                    />
+                    <p className="font-semibold">{lesson?.name}</p>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-xl font-bold mb-2 line-clamp-2">
+                    {lesson.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-gray-600 mb-3 line-clamp-3">
+                    {lesson.description}
+                  </p>
+
+                  {/* Category & Tone */}
+                  <div className="flex justify-between text-sm mb-3">
+                    <span className="px-2 py-1 bg-gray-100 rounded-md">
+                      {lesson.category}
+                    </span>
+                    <span className="px-2 py-1 bg-gray-100 rounded-md">
+                      {lesson.emotionalTone}
+                    </span>
+                  </div>
+
+                  {/* Access & Date */}
+                  <div className="flex justify-between items-center mb-4 text-sm">
+                    <span
+                      className={`px-2 py-1 rounded-md ${lesson.accessLevel === "premium"
+                          ? "bg-yellow-200"
+                          : "bg-green-200"
+                        }`}
+                    >
+                      {lesson.accessLevel?.toUpperCase()}
+                    </span>
+                    <span className="text-gray-500">
+                      {new Date(lesson?.createAt).toLocaleDateString()}
+                    </span>
+                  </div>
+
+                  {/* Button always bottom */}
+                  {!blocked && (
+                    <Link to={`/details-lesson/${lesson._id}`} className="mt-auto">
+                      <button className="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/80">
+                        See Details
+                      </button>
+                    </Link>
+                  )}
                 </div>
-
-                <h3 className="text-xl font-bold mb-2">{lesson.title}</h3>
-                <p className="text-gray-600 mb-3">{lesson.description?.slice(0, 120)}...</p>
-
-                <div className="flex justify-between text-sm mb-3">
-                  <span className="px-2 py-1 bg-gray-100 rounded-md">{lesson.category}</span>
-                  <span className="px-2 py-1 bg-gray-100 rounded-md">{lesson.emotionalTone}</span>
-                </div>
-
-                <div className="flex justify-between items-center mb-3 text-sm">
-                  <span className={`px-2 py-1 rounded-md ${lesson.accessLevel === "premium" ? "bg-yellow-200" : "bg-green-200"}`}>
-                    {lesson.accessLevel?.toUpperCase()}
-                  </span>
-                  <span className="text-gray-500">{new Date(lesson?.createAt).toLocaleDateString()}</span>
-                </div>
-
-                {!blocked && (
-                  <Link to={`/details-lesson/${lesson._id}`}>
-                    <button className="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/80">See Details</button>
-                  </Link>
-                )}
               </div>
             );
           })}
         </div>
+
 
         {/* Pagination */}
         {totalPages > 1 && (

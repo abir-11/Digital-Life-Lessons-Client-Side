@@ -27,6 +27,10 @@ import AdminProfile from '../Page/AdminDashboard/AdminProfile/AdminProfile';
 import ProfileEdits from '../Page/AdminDashboard/AdminProfile/ProfileEdits';
 import PrivetRoute from './PrivateRoute';
 import AdminRouter from './AdminRouter';
+import AboutUs from '../Page/AboutUs/AboutUs';
+import Contact from '../Page/Contact/Contact';
+import PrivacyPolicy from '../Page/PrivacyPolicy/PrivacyPolicy';
+import TermsConditions from '../Page/TermsConditions/TermsConditions';
 
 const router = createBrowserRouter([
     {
@@ -37,6 +41,22 @@ const router = createBrowserRouter([
                 index: true,
                 Component: Home
             },
+            {
+              path:'/about',
+              Component:AboutUs
+            },
+            {
+              path:'/contact',
+              Component:Contact
+            },
+            {
+             path:'/terms-conditions',
+             Component:TermsConditions
+            },
+            {
+                path:'/privacy-policy',
+               Component:PrivacyPolicy        
+        },
             {
                 path: '/public-lessons',
                 Component: PublicLessons

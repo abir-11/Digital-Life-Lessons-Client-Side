@@ -168,12 +168,7 @@ const MyLessons = () => {
                                 {/* Action Buttons */}
                                 <td className="align-middle h-full">
                                     <div className="flex items-center justify-center h-full space-x-4">
-                                        {/* Edit Button */}
-                                        <div className="tooltip" data-tip="Edit Lesson">
-                                            <button className="btn btn-square btn-sm bg-blue-100 text-blue-600 hover:bg-blue-200">
-                                                <FaRegEdit />
-                                            </button>
-                                        </div>
+                                    
 
                                         {/* Details Button */}
                                         <div className="tooltip" data-tip="Lesson Details">

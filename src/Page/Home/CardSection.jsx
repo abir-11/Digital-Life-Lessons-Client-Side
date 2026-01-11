@@ -2,7 +2,7 @@ import React from 'react';
 
 const CardSection = () => {
     return (
-        <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="flex items-center justify-center my-10 p-4">
             <div className="max-w-6xl mx-auto">
 
                 <div className="text-center mb-16">

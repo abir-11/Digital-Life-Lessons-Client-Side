@@ -10,7 +10,7 @@ import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 const Login = () => {
   const [showEyes, setShowEyes] = useState(false);
   const location = useLocation();
-  const { signInUser, signInGoogle, setUser } = useAuth();
+  const { signInUser, signInGoogle, setUser,user } = useAuth();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   // React Hook Form
@@ -41,7 +41,7 @@ const Login = () => {
 
         console.log("Google User:", user);
         const userInfo = {
-          displayName: user.displayName,
+          displayName: user?.displayName,
           email: user.email,
           photoURL: user.photoURL
         }
